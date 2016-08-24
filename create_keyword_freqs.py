@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[68]:
+# In[1]:
 
 import os
 import pandas as pd
@@ -23,13 +23,17 @@ metadata.columns
 metadata.head(5)
 
 
+# In[5]:
+
+for v in metadata.Luogo.tolist():
+    print(v)
+
+
 # # Luogo keywords
 
-# In[78]:
+# In[6]:
 
 cnt = Counter(metadata.Luogo.tolist())
-for token in all_tokens:
-    cnt[token] += 1
 cnt.most_common(30)
 
 
