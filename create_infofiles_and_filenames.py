@@ -53,7 +53,7 @@ metadata_it.tail(2)
 metadata_en.tail(10)
 
 
-# In[10]:
+# In[5]:
 
 merged = pd.concat([metadata_it,metadata_en], axis=1) 
 merged.tail(2)
@@ -61,7 +61,7 @@ merged.tail(2)
 
 # # Create filenames
 
-# In[5]:
+# In[6]:
 
 def create_filename(row_object):
     """Takes a DataFrame row from the 'merged' dataframe and returns a string filename."""
@@ -143,7 +143,7 @@ def create_filename(row_object):
 # 
 # https://commons.wikimedia.org/wiki/Commons:Associazione_DecArch/Batch_upload/places
 
-# In[6]:
+# In[7]:
 
 place_mappings_url = "https://commons.wikimedia.org/wiki/Commons:Associazione_DecArch/Batch_upload/places"
 place_mappings = pd.read_html(place_mappings_url, attrs = {"class":"wikitable"}, header=0)
@@ -171,12 +171,12 @@ place_mappings_specific = place_mappings_specific[["Specific_place" ,"Luogo","No
 place_mappings_specific = place_mappings_specific.set_index("Specific_place")
 
 
-# In[7]:
+# In[8]:
 
 place_mappings_general.head(3)
 
 
-# In[8]:
+# In[9]:
 
 place_mappings_specific.head(3)
 
@@ -190,7 +190,7 @@ place_mappings_specific.head(3)
 # ## Create wikitext for image pages
 # Available as .py script on [my github](https://github.com/mattiasostmar/GAR_Syria_2016-06/blob/master/create_metatdata_textfiles.py)
 
-# In[12]:
+# In[10]:
 
 # remove possible diuplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
@@ -413,7 +413,7 @@ filename_file.close()
 print("Stats: \nTotal images {}\nOK images {}\nUncategorized images {}\nImages missing author {}".format(total_images, OK_images - faulty_images, uncategorized_images, faulty_images ))
 
 
-# In[21]:
+# In[11]:
 
 get_ipython().system('ls -la ./photograph_template_texts/ | head -n10')
 
