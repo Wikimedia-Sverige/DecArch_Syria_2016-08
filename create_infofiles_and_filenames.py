@@ -53,7 +53,7 @@ metadata_it.tail(2)
 metadata_en.tail(10)
 
 
-# In[5]:
+# In[10]:
 
 merged = pd.concat([metadata_it,metadata_en], axis=1) 
 merged.tail(2)
@@ -61,7 +61,7 @@ merged.tail(2)
 
 # # Create filenames
 
-# In[6]:
+# In[5]:
 
 def create_filename(row_object):
     """Takes a DataFrame row from the 'merged' dataframe and returns a string filename."""
@@ -143,7 +143,7 @@ def create_filename(row_object):
 # 
 # https://commons.wikimedia.org/wiki/Commons:Associazione_DecArch/Batch_upload/places
 
-# In[7]:
+# In[6]:
 
 place_mappings_url = "https://commons.wikimedia.org/wiki/Commons:Associazione_DecArch/Batch_upload/places"
 place_mappings = pd.read_html(place_mappings_url, attrs = {"class":"wikitable"}, header=0)
@@ -171,12 +171,12 @@ place_mappings_specific = place_mappings_specific[["Specific_place" ,"Luogo","No
 place_mappings_specific = place_mappings_specific.set_index("Specific_place")
 
 
-# In[8]:
+# In[7]:
 
 place_mappings_general.head(3)
 
 
-# In[9]:
+# In[8]:
 
 place_mappings_specific.head(3)
 
@@ -190,7 +190,7 @@ place_mappings_specific.head(3)
 # ## Create wikitext for image pages
 # Available as .py script on [my github](https://github.com/mattiasostmar/GAR_Syria_2016-06/blob/master/create_metatdata_textfiles.py)
 
-# In[10]:
+# In[11]:
 
 # remove possible diuplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
@@ -324,11 +324,12 @@ for row_no, row in merged.iterrows():
     accession_number = "|accession number ="
     template_parts.append(accession_number)
     
-    source = "|source = " + str(row["Folder"]) + "/" + str(row["Filename"]) + "\n{{Associazione DecArch cooperation project|COH}}"
+    source = "|source = " +    "The original image file was recieved from Associazione Decarch with the following <folder> / <filename> structure:<br />\n'''" +    str(row["Folder"]) + " / " + str(row["Filename"]) + "'''\n{{Associazione DecArch cooperation project|COH}}"
+    
     template_parts.append(source)
     
     if pd.notnull(row["Nome autore"]):
-        permission = "|permission = {{CC-BY-SA-4.0|" + row["Nome autore"][8:] + " / GAR}}\n{{PermissionOTRS|id=2016042410005958}}"
+        permission = "|permission = {{CC-BY-SA-4.0|" + row["Nome autore"][8:] + " / DecArch}}\n{{PermissionOTRS|id=2016042410005958}}"
     else:
         permission = "|permission = {{CC-BY-SA-4.0|Associazione DecArch}}\n{{PermissionOTRS|id=2016042410005869}}"
     template_parts.append(permission)
@@ -345,7 +346,9 @@ for row_no, row in merged.iterrows():
     general_place_category = None
     maintanence_category = None
     batchupload_category = "[[Category:Images_from_DecArch_2016-08]]"
-    translation_needed_category = "[[Category:Images_from_DecArch_needing_English_description]]"
+    # if requested by DecArch:
+    # translation_needed_category = "[[Category:Images_from_DecArch_needing_English_description]]"
+    # categories_list.append(translation_needed_category)
     
     if place_mappings_specific.loc[spec_place]["category"] != "-" and pd.notnull(place_mappings_specific.loc[spec_place]["category"]): 
         
@@ -356,7 +359,6 @@ for row_no, row in merged.iterrows():
         general_place_category = "[[" + place_mappings_general.loc[row["Luogo"]]["category"] + "]]"
         #print("general_place_category: {}".format(general_place_category))
     
-    # [[Category:Images_from_GAR_Syria_2016-06]]
     else:
         maintanence_category = "[[Category:Images_from_DecArch_without_categories]]"
         #print("maintanence_category: {}".format(maintanence_category))
@@ -397,7 +399,7 @@ for row_no, row in merged.iterrows():
         faulty_images += 1
 
     categories_list.append(batchupload_category)
-    categories_list.append(translation_needed_category)
+    
     
     if len(categories_list) >0:
         OK_images += 1
