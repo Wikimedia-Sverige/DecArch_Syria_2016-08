@@ -423,7 +423,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">merged</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">metadata_it</span><span class="p">,</span><span class="n">metadata_en</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
@@ -438,7 +438,7 @@ div#notebook {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[10]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[5]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -513,10 +513,11 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[67]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">create_filename</span><span class="p">(</span><span class="n">row_object</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">os</span>
     <span class="sd">&quot;&quot;&quot;Takes a DataFrame row from the &#39;merged&#39; dataframe and returns a string filename.&quot;&quot;&quot;</span>
     <span class="c1"># remove all underscores</span>
     <span class="n">no_underscores</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">r&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Filename&quot;</span><span class="p">])</span>
@@ -529,7 +530,7 @@ div#notebook {
     <span class="c1">#print(ext)</span>
     
     <span class="c1"># &lt;Filename_1_clean&gt; = &lt;Filename1&gt; with &quot;20 marzo...&quot; removed, any dubble spaces replaced by single ones </span>
-    <span class="c1"># and finally the spaces substituted by underscores (_). Also remove the file type extension.</span>
+    <span class="c1"># and finally the spaces substituted by underscores (_). </span>
     <span class="n">yeardate_patt</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">r&quot; \d+[o&#39;]? m? ?arz[o0p] ?&#39;?\d+[\. ]?&quot;</span><span class="p">,</span><span class="n">flags</span><span class="o">=</span><span class="n">regex</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
     <span class="n">year_patt</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">r&quot; &#39;\d\d[\.,]? &quot;</span><span class="p">,</span><span class="n">flags</span><span class="o">=</span><span class="n">regex</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
     
@@ -546,8 +547,9 @@ div#notebook {
         <span class="n">filename_1_clean</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Filename&quot;</span><span class="p">]</span>
     
     <span class="c1"># Remove the extension from filename_1_clean</span>
-    <span class="n">ext_patt</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">regex</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
-    <span class="n">filename_1_clean</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">ext_patt</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">filename_1_clean</span><span class="p">)</span>
+    <span class="n">fname</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename_1_clean</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">filename_1_clean</span> <span class="o">=</span> <span class="n">fname</span>
     <span class="c1">#print(filename_1_clean)</span>
     
     <span class="c1"># Remove all &#39;Bis&#39; from end of filename_1_clean</span>
@@ -571,13 +573,14 @@ div#notebook {
     <span class="c1">#So for 49) Palmira. Via colonnata presso il teatro. 20 marzo &#39;93. Bis.jpg end result is</span>
     <span class="c1">#Palmira._Via_colonnata_presso_il_teatro._-_DecArch_-1-49.jpg</span>
     <span class="c1">#Palmira._Via_colonnata_presso_il_teatro._-_DecArch_-1-49.jpg</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">filename_1_clean</span> <span class="o">+</span> <span class="s2">&quot;_-_DecArch_&quot;</span> <span class="o">+</span> <span class="n">folder_no</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">filename_0_clean</span> <span class="o">+</span> <span class="n">ext</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">filename_1_clean</span> <span class="o">+</span> <span class="s2">&quot;_-_DecArch_&quot;</span> <span class="o">+</span> <span class="n">folder_no</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">filename_0_clean</span>
     
     <span class="c1"># Ensure no multiple spaces left</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">r&quot; +&quot;</span><span class="p">,</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
     
     <span class="c1"># Repalce all spaces with underscores</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">r&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Filename after create_filename(): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
     
     <span class="k">return</span> <span class="n">filename</span>
 </pre></div>
@@ -612,7 +615,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">place_mappings_url</span> <span class="o">=</span> <span class="s2">&quot;https://commons.wikimedia.org/wiki/Commons:Associazione_DecArch/Batch_upload/places&quot;</span>
@@ -648,7 +651,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">place_mappings_general</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -662,7 +665,7 @@ div#notebook {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[8]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -713,7 +716,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">place_mappings_specific</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -727,7 +730,7 @@ div#notebook {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[8]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[9]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -812,7 +815,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># remove possible diuplicate files with other extension names</span>
@@ -832,7 +835,7 @@ div#notebook {
     <span class="n">filename</span> <span class="o">=</span> <span class="n">create_filename</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 
     <span class="c1">#print(&quot;filename: {}&quot;.format(filename))</span>
-    <span class="n">filenames_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">|</span><span class="si">{}</span><span class="s2">|</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Folder&quot;</span><span class="p">],</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Nome foto&quot;</span><span class="p">],</span><span class="n">filename</span><span class="p">))</span>
+    <span class="n">filenames_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">|</span><span class="si">{}</span><span class="s2">|</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Folder&quot;</span><span class="p">],</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Filename&quot;</span><span class="p">],</span><span class="n">filename</span><span class="p">))</span>
     
     <span class="n">outpath</span> <span class="o">=</span> <span class="s2">&quot;./photograph_template_texts/&quot;</span>
     <span class="n">nome_foto</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Nome foto&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
@@ -1055,1608 +1058,2678 @@ div#notebook {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Filename: 1) Palmira. T.del bel temenos angolo sud-ovest. 20 marzo &apos;93. Bis.jpg
+<pre>Palmira. T.del bel temenos angolo sud-ovest.  Bis
+Filename after create_filename(): Palmira._T.del_bel_temenos_angolo_sud-ovest._-_DecArch_1-1
+Filename: 1) Palmira. T.del bel temenos angolo sud-ovest. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(47, 61), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T.di bel porticato ovest.  Bis
+Filename after create_filename(): Palmira._T.di_bel_porticato_ovest._-_DecArch_1-2
 Filename: 2) Palmira. T.di bel porticato ovest. 2&apos; marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 2&apos; marzo &apos;93.&quot;&gt;
 
+Palmira. Temenos T. di bel ingresso facciata interna lato ovest.  Bis
+Filename after create_filename(): Palmira._Temenos_T._di_bel_ingresso_facciata_interna_lato_ovest._-_DecArch_1-3
 Filename: 3) Palmira. Temenos T. di bel ingresso facciata interna lato ovest. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(67, 81), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Temenos T. di bel ingresso facciata interna lato ovest.  Bis
+Filename after create_filename(): Palmira._Temenos_T._di_bel_ingresso_facciata_interna_lato_ovest._-_DecArch_1-4
 Filename: 4) Palmira. Temenos T. di bel ingresso facciata interna lato ovest. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(67, 81), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Temenos T. di bel ingresso facciata interna lato ovest.  Bis
+Filename after create_filename(): Palmira._Temenos_T._di_bel_ingresso_facciata_interna_lato_ovest._-_DecArch_1-5
 Filename: 5) Palmira. Temenos T. di bel ingresso facciata interna lato ovest. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(67, 81), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Temenos T. di bel ingresso facciata interna lato ovest.  Bis
+Filename after create_filename(): Palmira._Temenos_T._di_bel_ingresso_facciata_interna_lato_ovest._-_DecArch_1-6
 Filename: 6) Palmira. Temenos T. di bel ingresso facciata interna lato ovest. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(67, 81), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Temenos T. di bel.  Bis
+Filename after create_filename(): Palmira._Temenos_T._di_bel._-_DecArch_1-7
 Filename: 7) Palmira. Temenos T. di bel. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Temenos T. di bel. Plastico  Bis
+Filename after create_filename(): Palmira._Temenos_T._di_bel._Plastico_-_DecArch_1-8
 Filename: 8) Palmira. Temenos T. di bel. Plastico 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(39, 53), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira  Bis
+Filename after create_filename(): Palmira_-_DecArch_1-9
 Filename: 9) Palmira 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(10, 24), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Pianta. maggio Bis
+Filename after create_filename(): Palmira._Pianta._maggio_-_DecArch_1-10
 Filename: 10) Palmira. Pianta. maggio &apos;93. Bis.jpg
 Match: None
 
+Palmira. T. di bel.  Bis
+Filename after create_filename(): Palmira._T._di_bel._-_DecArch_1-11
 Filename: 11) Palmira. T. di bel. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(23, 37), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Cella T di bel. Bis
+Filename after create_filename(): Palmira._Cella_T_di_bel._-_DecArch_1-12
 Filename: 12) Palmira. Cella T di bel. 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Palmira. Cella T. di bel.  Bis
+Filename after create_filename(): Palmira._Cella_T._di_bel._-_DecArch_1-13
 Filename: 13) Palmira. Cella T. di bel. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Cella T. di bel. Adyton Nord.  Bis
+Filename after create_filename(): Palmira._Cella_T._di_bel._Adyton_Nord._-_DecArch_1-14
 Filename: 14) Palmira. Cella T. di bel. Adyton Nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di bel. Portale d&apos;ingresso .  Bis
+Filename after create_filename(): Palmira._T._di_bel._Portale_d&apos;ingresso_._-_DecArch_1-15
 Filename: 15) Palmira. T. di bel. Portale d&apos;ingresso . 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+16) Alfa 35 Bis
+Filename after create_filename(): 16)_Alfa_35_-_DecArch_1-16
 Filename: 16) Alfa 35 Bis.jpg
 Match: None
 
+Alfa 34. Palmira. T. di bel. Temenos, lato Ovest (ingresso).  Bis
+Filename after create_filename(): Alfa_34._Palmira._T._di_bel._Temenos,_lato_Ovest_(ingresso)._-_DecArch_1-17
 Filename: 17). Alfa 34. Palmira. T. di bel. Temenos, lato Ovest (ingresso). 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(65, 79), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, facciata verso tetrapilo, fornice lat.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_facciata_verso_tetrapilo,_fornice_lat._-_DecArch_1-18
 Filename: 18) Palmira. Arco monumentale, facciata verso tetrapilo, fornice lat. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(69, 83), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, facciata verso tetrapilo.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_facciata_verso_tetrapilo._-_DecArch_1-19
 Filename: 19) Palmira. Arco monumentale, facciata verso tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(56, 70), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, facciata verso tetrapilo, fornice entrale.  Bia
+Filename after create_filename(): Palmira._Arco_monumentale,_facciata_verso_tetrapilo,_fornice_entrale._Bia_-_DecArch_1-20
 Filename: 20) Palmira. Arco monumentale, facciata verso tetrapilo, fornice entrale. 20 marzo &apos;93. Bia.jpg
 Match: &lt;regex.Match object; span=(73, 87), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-21
 Filename: 21) Palmira. Arco monumentale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-22
 Filename: 22) Palmira. Arco monumentale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, facciata verso T. di Bel.  Bis.
+Filename after create_filename(): Palmira._Arco_monumentale,_facciata_verso_T._di_Bel._._-_DecArch_1-23
 Filename: 23) Palmira. Arco monumentale, facciata verso T. di Bel. 20 m arzo &apos;93. Bis..jpg
 Match: &lt;regex.Match object; span=(56, 71), match=&quot; 20 m arzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco._-_DecArch_1-24
 Filename: 24) Palmira. Via colonnata tra T. di bel e Arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco, part di X 2.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco,_part_di_X_2._-_DecArch_1-25
 Filename: 25) Palmira. Via colonnata tra T. di bel e Arco, part di X 2. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(61, 75), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco, X 2.  Bis.
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco,_X_2._._-_DecArch_1-26
 Filename: 26) Palmira. Via colonnata tra T. di bel e Arco, X 2. 20 marzo &apos;93. Bis..jpg
 Match: &lt;regex.Match object; span=(53, 67), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco._-_DecArch_1-27
 Filename: 27) Palmira. Via colonnata tra T. di bel e Arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco, parto di W 37.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco,_parto_di_W_37._-_DecArch_1-28
 Filename: 28) Palmira. Via colonnata tra T. di bel e Arco, parto di W 37. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(63, 77), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco._-_DecArch_1-29
 Filename: 29) Palmira. Via colonnata tra T. di bel e Arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco._-_DecArch_1-30
 Filename: 30) Palmira. Via colonnata tra T. di bel e Arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. di bel e Arco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._di_bel_e_Arco._-_DecArch_1-31
 Filename: 31) Palmira. Via colonnata tra T. di bel e Arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo.  Bis
+Filename after create_filename(): Palmira._Ninfeo._-_DecArch_1-32
 Filename: 32) Palmira. Ninfeo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo.  Bis
+Filename after create_filename(): Palmira._Ninfeo._-_DecArch_1-33
 Filename: 33) Palmira. Ninfeo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo.  Bis
+Filename after create_filename(): Palmira._Ninfeo._-_DecArch_1-34
 Filename: 34) Palmira. Ninfeo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira  Bis
+Filename after create_filename(): Palmira_-_DecArch_1-35
 Filename: 35) Palmira 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira.  Bis
+Filename after create_filename(): Palmira._-_DecArch_1-36
 Filename: 36) Palmira. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(12, 26), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+37) Alfa 31. Bis
+Filename after create_filename(): 37)_Alfa_31._-_DecArch_1-37
 Filename: 37) Alfa 31. Bis.jpg
 Match: None
 
+Palmira. T. di Bel, temenos.  Bis
+Filename after create_filename(): Palmira._T._di_Bel,_temenos._-_DecArch_1-38
 Filename: 38) Palmira. T. di Bel, temenos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di Bel, temenos. Part.di U32.  Bis
+Filename after create_filename(): Palmira._T._di_Bel,_temenos._Part.di_U32._-_DecArch_1-39
 Filename: 39) Palmira. T. di Bel, temenos. Part.di U32. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di Bel, temenos.  Bis
+Filename after create_filename(): Palmira._T._di_Bel,_temenos._-_DecArch_1-40
 Filename: 40) Palmira. T. di Bel, temenos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di Bel, temenos.  Bis
+Filename after create_filename(): Palmira._T._di_Bel,_temenos._-_DecArch_1-41
 Filename: 41) Palmira. T. di Bel, temenos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di Bel, temenos.  Bis
+Filename after create_filename(): Palmira._T._di_Bel,_temenos._-_DecArch_1-42
 Filename: 42) Palmira. T. di Bel, temenos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di Bel, temenos.  Bis
+Filename after create_filename(): Palmira._T._di_Bel,_temenos._-_DecArch_1-43
 Filename: 43) Palmira. T. di Bel, temenos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di Bel, temenos.  Bis
+Filename after create_filename(): Palmira._T._di_Bel,_temenos._-_DecArch_1-44
 Filename: 44) Palmira. T. di Bel, temenos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Portale al teatro dalla via colonnata.  Bis
+Filename after create_filename(): Palmira._Portale_al_teatro_dalla_via_colonnata._-_DecArch_1-45
 Filename: 45) Palmira. Portale al teatro dalla via colonnata. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(51, 65), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata presso il teatro.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_presso_il_teatro._-_DecArch_1-46
 Filename: 46) Palmira. Via colonnata presso il teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata presso il teatro.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_presso_il_teatro._-_DecArch_1-47
 Filename: 47) Palmira. Via colonnata presso il teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata presso il teatro.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_presso_il_teatro._-_DecArch_1-48
 Filename: 48) Palmira. Via colonnata presso il teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata presso il teatro.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_presso_il_teatro._-_DecArch_1-49
 Filename: 49) Palmira. Via colonnata presso il teatro. 20 arzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 57), match=&quot; 20 arzo &apos;93.&quot;&gt;
 
+Palmira. Mura di Zenobia. Bis
+Filename after create_filename(): Palmira._Mura_di_Zenobia._-_DecArch_1-50
 Filename: 50) Palmira. Mura di Zenobia. 20 marzo &apos;93.Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Colonna Onoraria presso porta delle carovane.  Bis
+Filename after create_filename(): Palmira._Colonna_Onoraria_presso_porta_delle_carovane._-_DecArch_1-51
 Filename: 51) Palmira. Colonna Onoraria presso porta delle carovane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(58, 72), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Porta delle carovane.  Bis
+Filename after create_filename(): Palmira._Porta_delle_carovane._-_DecArch_1-52
 Filename: 52) Palmira. Porta delle carovane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata del teatro.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_del_teatro._-_DecArch_1-53
 Filename: 53) Palmira. Via colonnata del teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata del teatro.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_del_teatro._-_DecArch_1-54
 Filename: 54) Palmira. Via colonnata del teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata del teatro.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_del_teatro._-_DecArch_1-55
 Filename: 55) Palmira. Via colonnata del teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Passaggio alla via colonnata del teatro.  Bis
+Filename after create_filename(): Palmira._Passaggio_alla_via_colonnata_del_teatro._-_DecArch_1-56
 Filename: 56) Palmira. Passaggio alla via colonnata del teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(53, 67), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco di passaggio verso la via colonnata del teatro.  Bis
+Filename after create_filename(): Palmira._Arco_di_passaggio_verso_la_via_colonnata_del_teatro._-_DecArch_1-57
 Filename: 57) Palmira. Arco di passaggio verso la via colonnata del teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(65, 79), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+58) Alfa 32. Bis
+Filename after create_filename(): 58)_Alfa_32._-_DecArch_1-58
 Filename: 58) Alfa 32. Bis.jpg
 Match: None
 
+Palmira. Passaggio verso la via del teatro.  Bis
+Filename after create_filename(): Palmira._Passaggio_verso_la_via_del_teatro._-_DecArch_1-59
 Filename: 59) Palmira. Passaggio verso la via del teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(47, 61), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Terme_di_Diocleziano._-_DecArch_1-60
 Filename: 60) Palmira. Terme di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano. Uguale a X 39.  Bis
+Filename after create_filename(): Palmira._Terme_di_Diocleziano._Uguale_a_X_39._-_DecArch_1-61
 Filename: 61) Palmira. Terme di Diocleziano. Uguale a X 39. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(49, 63), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Terme_di_Diocleziano._-_DecArch_1-62
 Filename: 62) Palmira. Terme di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano
+Filename after create_filename(): Palmira._Terme_di_Diocleziano_-_DecArch_1-63
 Filename: 63) Palmira. Terme di Diocleziano. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano
+Filename after create_filename(): Palmira._Terme_di_Diocleziano_-_DecArch_1-64
 Filename: 64) Palmira. Terme di Diocleziano. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano. Part. di X 33
+Filename after create_filename(): Palmira._Terme_di_Diocleziano._Part._di_X_33_-_DecArch_1-65
 Filename: 65) Palmira. Terme di Diocleziano. Part. di X 33. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(49, 63), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano
+Filename after create_filename(): Palmira._Terme_di_Diocleziano_-_DecArch_1-66
 Filename: 66) Palmira. Terme di Diocleziano. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano
+Filename after create_filename(): Palmira._Terme_di_Diocleziano_-_DecArch_1-67
 Filename: 67) Palmira. Terme di Diocleziano. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Terme di Diocleziano
+Filename after create_filename(): Palmira._Terme_di_Diocleziano_-_DecArch_1-68
 Filename: 68) Palmira. Terme di Diocleziano. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Temenos Sant. Nebo.  Bis
+Filename after create_filename(): Palmira._Temenos_Sant._Nebo._-_DecArch_1-69
 Filename: 69) Palmira. Temenos Sant. Nebo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Sant. Nebo.  Bis
+Filename after create_filename(): Palmira._Sant._Nebo._-_DecArch_1-70
 Filename: 70) Palmira. Sant. Nebo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Sant. Nebo.  Bis
+Filename after create_filename(): Palmira._Sant._Nebo._-_DecArch_1-71
 Filename: 71) Palmira. Sant. Nebo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra arco e Sant. Nebo.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_arco_e_Sant._Nebo._-_DecArch_1-72
 Filename: 72) Palmira. Via colonnata tra arco e Sant. Nebo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(49, 63), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra arco e tetrapilo.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_arco_e_tetrapilo._-_DecArch_1-73
 Filename: 73) Palmira. Via colonnata tra arco e tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata dell&apos; arco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_dell&apos;_arco._-_DecArch_1-74
 Filename: 74) Palmira. Via colonnata dell&apos; arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra arco e tetrapilo.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_arco_e_tetrapilo._-_DecArch_1-75
 Filename: 75) Palmira. Via colonnata tra arco e tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-76
 Filename: 76) Palmira. Arco monumentale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-78
 Filename: 78) Palmira. Arco monumentale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-79
 Filename: 79) Palmira. Arco monumentale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-80
 Filename: 80) Palmira. Arco monumentale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-81
 Filename: 81) Palmira. Arco monumentale. 20 marzp &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzp &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, facciata verso tetrapilo front. lat.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_facciata_verso_tetrapilo_front._lat._-_DecArch_1-82
 Filename: 82) Palmira. Arco monumentale, facciata verso tetrapilo front. lat. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(67, 81), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, facciata verso tetrapilo front. later.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_facciata_verso_tetrapilo_front._later._-_DecArch_1-83
 Filename: 83) Palmira. Arco monumentale, facciata verso tetrapilo front. later. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(69, 83), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale._-_DecArch_1-84
 Filename: 84) Palmira. Arco monumentale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, facciata verso tetrapilo fornice centr.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_facciata_verso_tetrapilo_fornice_centr._-_DecArch_1-85
 Filename: 85) Palmira. Arco monumentale, facciata verso tetrapilo fornice centr. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(70, 84), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, lato corto maggiore, interno.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_lato_corto_maggiore,_interno._-_DecArch_1-86
 Filename: 86) Palmira. Arco monumentale, lato corto maggiore, interno. 20 arzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(60, 73), match=&quot; 20 arzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, lato corto maggiore, interno.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_lato_corto_maggiore,_interno._-_DecArch_1-87
 Filename: 87) Palmira. Arco monumentale, lato corto maggiore, interno. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(60, 74), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Arco monumentale, lato corto maggiore.  Bis
+Filename after create_filename(): Palmira._Arco_monumentale,_lato_corto_maggiore._-_DecArch_1-88
 Filename: 88) Palmira. Arco monumentale, lato corto maggiore. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(51, 65), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata, nord esedra. Part.di Z 24.  Bis
+Filename after create_filename(): Palmira._Via_colonnata,_nord_esedra._Part.di_Z_24._-_DecArch_1-89
 Filename: 89) Palmira. Via colonnata, nord esedra. Part.di Z 24. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(54, 68), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata, nord esedra. Z 24.  Bis
+Filename after create_filename(): Palmira._Via_colonnata,_nord_esedra._Z_24._-_DecArch_1-90
 Filename: 90) Palmira. Via colonnata, nord esedra. Z 24. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata, nord esedra.  Bis
+Filename after create_filename(): Palmira._Via_colonnata,_nord_esedra._-_DecArch_1-91
 Filename: 91) Palmira. Via colonnata, nord esedra. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(40, 54), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Esedra sulla via colonnata verso il T.Fun.  Bis
+Filename after create_filename(): Palmira._Esedra_sulla_via_colonnata_verso_il_T.Fun._-_DecArch_1-92
 Filename: 92) Palmira. Esedra sulla via colonnata verso il T.Fun. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(55, 69), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata verso T.funerario, occupazione strada.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_verso_T.funerario,_occupazione_strada._-_DecArch_1-93
 Filename: 93 Palmira. Via colonnata verso T.funerario, occupazione strada. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(64, 78), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tetrapilo.  Bis
+Filename after create_filename(): Palmira._Tetrapilo._-_DecArch_1-94
 Filename: 94) Palmira. Tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(23, 37), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tetrapilo. Part.di Z 10.  Bis
+Filename after create_filename(): Palmira._Tetrapilo._Part.di_Z_10._-_DecArch_1-95
 Filename: 95) Palmira. Tetrapilo. Part.di Z 10. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tetrapilo. Z 10.  Bis
+Filename after create_filename(): Palmira._Tetrapilo._Z_10._-_DecArch_1-96
 Filename: 96) Palmira. Tetrapilo. Z 10. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tetrapilo.  Bis
+Filename after create_filename(): Palmira._Tetrapilo._-_DecArch_1-97
 Filename: 97) Palmira. Tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(23, 37), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tetrapilo.  Bis
+Filename after create_filename(): Palmira._Tetrapilo._-_DecArch_1-98
 Filename: 98) Palmira. Tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(23, 37), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tetrapilo.  Bis
+Filename after create_filename(): Palmira._Tetrapilo._-_DecArch_1-99
 Filename: 99) Palmira. Tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(23, 37), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata dal tetrapilo all&apos;arco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_dal_tetrapilo_all&apos;arco._-_DecArch_1-100
 Filename: 100) Palmira. Via colonnata dal tetrapilo all&apos;arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(51, 65), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata e tetrapilo.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_e_tetrapilo._-_DecArch_1-101
 Filename: 101) Palmira. Via colonnata e tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(40, 54), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata e tetrapilo.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_e_tetrapilo._-_DecArch_1-102
 Filename: 102) Palmira. Via colonnata e tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(40, 54), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo presso tetrapilo.  Bis
+Filename after create_filename(): Palmira._Ninfeo_presso_tetrapilo._-_DecArch_1-103
 Filename: 103) Palmira. Ninfeo presso tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo presso tetrapilo.  Bis
+Filename after create_filename(): Palmira._Ninfeo_presso_tetrapilo._-_DecArch_1-104
 Filename: 104) Palmira. Ninfeo presso tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo presso tetrapilo.  Bis
+Filename after create_filename(): Palmira._Ninfeo_presso_tetrapilo._-_DecArch_1-105
 Filename: 105) Palmira. Ninfeo presso tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo presso tetrapilo. Part.di Z 05.  Bis
+Filename after create_filename(): Palmira._Ninfeo_presso_tetrapilo._Part.di_Z_05._-_DecArch_1-106
 Filename: 106) Palmira. Ninfeo presso tetrapilo. Part.di Z 05. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(52, 66), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Ninfeo presso tetrapilo. Z 05.  Bis
+Filename after create_filename(): Palmira._Ninfeo_presso_tetrapilo._Z_05._-_DecArch_1-107
 Filename: 107) Palmira. Ninfeo presso tetrapilo. Z 05. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Corte a peristilio.  Bis
+Filename after create_filename(): Palmira._Corte_a_peristilio._-_DecArch_1-108
 Filename: 108) Palmira. Corte a peristilio. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(33, 47), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Corte a peristilio.  Bis
+Filename after create_filename(): Palmira._Corte_a_peristilio._-_DecArch_1-109
 Filename: 109) Palmira. Corte a peristilio. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(33, 47), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Corte a peristilio.  Bis
+Filename after create_filename(): Palmira._Corte_a_peristilio._-_DecArch_1-110
 Filename: 110) Palmira. Corte a peristilio. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(33, 47), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà, sala dei banchetti.  Bis
+Filename after create_filename(): Palmira._Agorà,_sala_dei_banchetti._-_DecArch_1-111
 Filename: 111) Palmira. Agorà, sala dei banchetti. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(40, 54), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà.  Bis
+Filename after create_filename(): Palmira._Agorà._-_DecArch_1-112
 Filename: 112) Palmira. Agorà. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà.  Bis
+Filename after create_filename(): Palmira._Agorà._-_DecArch_1-113
 Filename: 113) Palmira. Agorà. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà  Bis
+Filename after create_filename(): Palmira._Agorà_-_DecArch_1-114
 Filename: 114) Palmira. Agorà 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà.  Bis
+Filename after create_filename(): Palmira._Agorà._-_DecArch_1-115
 Filename: 115) Palmira. Agorà. 2o marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 2o marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà. Part.di Y 35.  Bis
+Filename after create_filename(): Palmira._Agorà._Part.di_Y_35._-_DecArch_1-116
 Filename: 116) Palmira. Agorà. Part.di Y 35. 20 marz0 &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marz0 &apos;93.&quot;&gt;
 
+Palmira. Agorà.  Bis
+Filename after create_filename(): Palmira._Agorà._-_DecArch_1-117
 Filename: 117) Palmira. Agorà. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà.  Bs
+Filename after create_filename(): Palmira._Agorà._Bs_-_DecArch_1-118
 Filename: 118) Palmira. Agorà. 20 marzo &apos;93. Bs.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Agorà.  Bis
+Filename after create_filename(): Palmira._Agorà._-_DecArch_1-119
 Filename: 119) Palmira. Agorà. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Corte del tariffario.  Bis
+Filename after create_filename(): Palmira._Corte_del_tariffario._-_DecArch_1-120
 Filename: 120) Palmira. Corte del tariffario. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Senato.  Bis
+Filename after create_filename(): Palmira._Senato._-_DecArch_1-121
 Filename: 121) Palmira. Senato. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(21, 35), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Senato.  Bis
+Filename after create_filename(): Palmira._Senato._-_DecArch_1-122
 Filename: 122) Palmira. Senato. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(21, 35), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Senato.  Bis
+Filename after create_filename(): Palmira._Senato._-_DecArch_1-123
 Filename: 123) Palmira. Senato. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(21, 35), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Teatro.  Bis
+Filename after create_filename(): Palmira._Teatro._-_DecArch_1-124
 Filename: 124) Palmira. Teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(21, 35), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Teatro. Trab. I Ordine.  Bis
+Filename after create_filename(): Palmira._Teatro._Trab._I_Ordine._-_DecArch_1-125
 Filename: 125) Palmira. Teatro. Trab. I Ordine. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Coronamento porta regia.  Bis
+Filename after create_filename(): Palmira._Coronamento_porta_regia._-_DecArch_1-126
 Filename: 126) Palmira. Coronamento porta regia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(38, 52), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Teatro.  Bis
+Filename after create_filename(): Palmira._Teatro._-_DecArch_1-127
 Filename: 127) Palmira. Teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(21, 35), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Teatro.  Bis
+Filename after create_filename(): Palmira._Teatro._-_DecArch_1-128
 Filename: 128) Palmira. Teatro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(21, 35), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Portale al teatro della via colonnata.  Bis
+Filename after create_filename(): Palmira._Portale_al_teatro_della_via_colonnata._-_DecArch_1-129
 Filename: 129) Palmira. Portale al teatro della via colonnata. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(52, 66), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Portale al teatro della via colonnata.  Bis
+Filename after create_filename(): Palmira._Portale_al_teatro_della_via_colonnata._-_DecArch_1-130
 Filename: 130) Palmira. Portale al teatro della via colonnata. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(52, 66), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, tetrapilo.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_tetrapilo._-_DecArch_1-131
 Filename: 131) Palmira. Campo di Diocleziano, tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, tetrapilo.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_tetrapilo._-_DecArch_1-132
 Filename: 132) Palmira. Campo di Diocleziano, tetrapilo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, via colonnata di accesso.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_via_colonnata_di_accesso._-_DecArch_1-133
 Filename: 133) Palmira. Campo di Diocleziano, via colonnata di accesso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(61, 75), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, via colonnata di accesso.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_via_colonnata_di_accesso._-_DecArch_1-134
 Filename: 134) Palmira. Campo di Diocleziano, via colonnata di accesso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(61, 75), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, propile.  Bisi
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_propile._i_-_DecArch_1-135
 Filename: 135) Palmira. Campo di Diocleziano, propile. 20 marzo &apos;93. Bisi.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. funerario e campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._funerario_e_campo_di_Diocleziano._-_DecArch_1-136
 Filename: 136) Palmira. Via colonnata tra T. funerario e campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(68, 82), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. funerario e campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._funerario_e_campo_di_Diocleziano._-_DecArch_1-137
 Filename: 137) Palmira. Via colonnata tra T. funerario e campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(68, 82), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. funerario e campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._funerario_e_campo_di_Diocleziano._-_DecArch_1-138
 Filename: 138) Palmira. Via colonnata tra T. funerario e campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(68, 82), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. funerario e campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._funerario_e_campo_di_Diocleziano._-_DecArch_1-139
 Filename: 139) Palmira. Via colonnata tra T. funerario e campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(68, 82), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata tra T. funerario e campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_tra_T._funerario_e_campo_di_Diocleziano._-_DecArch_1-140
 Filename: 140) Palmira. Via colonnata tra T. funerario e campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(68, 82), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina. part.di Beta 25.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._part.di_Beta_25._-_DecArch_1-141
 Filename: 141) Palmira. T. funerario in rovina. part.di Beta 25. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(54, 68), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina. Beta 25.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._Beta_25._-_DecArch_1-142
 Filename: 142) Palmira. T. funerario in rovina. Beta 25. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._-_DecArch_1-143
 Filename: 143) Palmira. T. funerario in rovina. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._-_DecArch_1-144
 Filename: 144) Palmira. T. funerario in rovina. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._-_DecArch_1-145
 Filename: 145) Palmira. T. funerario in rovina. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-146
 Filename: 146) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-147
 Filename: 147) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina. Uguale a beta 23.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._Uguale_a_beta_23._-_DecArch_1-148
 Filename: 148) Palmira. T. funerario in rovina. Uguale a beta 23. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(55, 69), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._-_DecArch_1-149
 Filename: 149) Palmira. T. funerario in rovina. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina.  bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina._-_DecArch_1-150
 Filename: 150) Palmira. T. funerario in rovina. 20 marzo &apos;93. bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-151
 Filename: 151) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-152
 Filename: 152) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-153
 Filename: 153) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-154
 Filename: 154) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-155
 Filename: 155) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_-_DecArch_1-156
 Filename: 156) Palmira. T. funerario in rovina 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario in rovina o arco.  Bis
+Filename after create_filename(): Palmira._T._funerario_in_rovina_o_arco._-_DecArch_1-157
 Filename: 157) Palmira. T. funerario in rovina o arco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario, cornice lati cella  Bis
+Filename after create_filename(): Palmira._T._funerario,_cornice_lati_cella_-_DecArch_1-158
 Filename: 158) Palmira. T. funerario, cornice lati cella 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario  Bis
+Filename after create_filename(): Palmira._T._funerario_-_DecArch_1-159
 Filename: 159) Palmira. T. funerario 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario.  Bis
+Filename after create_filename(): Palmira._T._funerario._-_DecArch_1-160
 Filename: 160) Palmira. T. funerario. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario.  Bis
+Filename after create_filename(): Palmira._T._funerario._-_DecArch_1-161
 Filename: 161 Palmira. T. funerario. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario.  Bis
+Filename after create_filename(): Palmira._T._funerario._-_DecArch_1-162
 Filename: 162) Palmira. T. funerario. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario.  Bis
+Filename after create_filename(): Palmira._T._funerario._-_DecArch_1-163
 Filename: 163) Palmira. T. funerario. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. funerario  Bis
+Filename after create_filename(): Palmira._T._funerario_-_DecArch_1-164
 Filename: 164) Palmira. T. funerario 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata Nord o arco. Dav T.fun.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_Nord_o_arco._Dav_T.fun._-_DecArch_1-165
 Filename: 165) Palmira. Via colonnata Nord o arco. Dav T.fun. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(51, 65), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata Nord T.funerario.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_Nord_T.funerario._-_DecArch_1-166
 Filename: 166) Palmira. Via colonnata Nord T.funerario. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata dal tetrapilo al T. fun.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_dal_tetrapilo_al_T._fun._-_DecArch_1-167
 Filename: 167) Palmira. Via colonnata dal tetrapilo al T. fun. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(52, 66), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Sant.di baal Shamin  Bis
+Filename after create_filename(): Palmira._Sant.di_baal_Shamin_-_DecArch_1-168
 Filename: 168) Palmira. Sant.di baal Shamin 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(33, 47), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Sant.di baal Shamin, corte nord, porticato sud.  Bis
+Filename after create_filename(): Palmira._Sant.di_baal_Shamin,_corte_nord,_porticato_sud._-_DecArch_1-169
 Filename: 169 Palmira. Sant.di baal Shamin, corte nord, porticato sud. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(60, 74), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Sant.di baal Shamin, corte nord, porticato sud.  Bis
+Filename after create_filename(): Palmira._Sant.di_baal_Shamin,_corte_nord,_porticato_sud._-_DecArch_1-170
 Filename: 170) Palmira. Sant.di baal Shamin, corte nord, porticato sud. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(61, 75), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Sant.di baal Shamin, corte sud  Bis
+Filename after create_filename(): Palmira._Sant.di_baal_Shamin,_corte_sud_-_DecArch_1-171
 Filename: 171) Palmira. Sant.di baal Shamin, corte sud 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T.di baal Shamin, interno cella  Bis
+Filename after create_filename(): Palmira._T.di_baal_Shamin,_interno_cella_-_DecArch_1-172
 Filename: 172) Palmira. T.di baal Shamin, interno cella 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di baal Shamin, interno cella  Bis
+Filename after create_filename(): Palmira._T._di_baal_Shamin,_interno_cella_-_DecArch_1-173
 Filename: 173) Palmira. T. di baal Shamin, interno cella 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di baal Shamin, interno cella  Bis
+Filename after create_filename(): Palmira._T._di_baal_Shamin,_interno_cella_-_DecArch_1-174
 Filename: 174) Palmira. T. di baal Shamin, interno cella 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di baal Shamin, finestra muro cella  Bis
+Filename after create_filename(): Palmira._T._di_baal_Shamin,_finestra_muro_cella_-_DecArch_1-175
 Filename: 175) Palmira. T. di baal Shamin, finestra muro cella 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(52, 66), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di Baal Shamin, trab.princ.  Bis
+Filename after create_filename(): Palmira._T._di_Baal_Shamin,_trab.princ._-_DecArch_1-176
 Filename: 176) Palmira. T. di Baal Shamin, trab.princ. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di baal Shamin, pronao  Bis
+Filename after create_filename(): Palmira._T._di_baal_Shamin,_pronao_-_DecArch_1-177
 Filename: 177) Palmira. T. di baal Shamin, pronao 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(39, 53), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di baal Shamin  Bis
+Filename after create_filename(): Palmira._T._di_baal_Shamin_-_DecArch_1-178
 Filename: 178) Palmira. T. di baal Shamin 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(31, 45), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di baal Shamin da nord.  Bis
+Filename after create_filename(): Palmira._T._di_baal_Shamin_da_nord._-_DecArch_1-179
 Filename: 179) Palmira. T. di baal Shamin da nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(40, 54), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata dal campo di Diocleziano alla porta di Damasco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_dal_campo_di_Diocleziano_alla_porta_di_Damasco._-_DecArch_1-180
 Filename: 180) Palmira. Via colonnata dal campo di Diocleziano alla porta di Damasco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(75, 89), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata dal campo di Diocleziano alla porta di Damasco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_dal_campo_di_Diocleziano_alla_porta_di_Damasco._-_DecArch_1-181
 Filename: 181) Palmira. Via colonnata dal campo di Diocleziano alla porta di Damasco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(75, 89), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Via colonnata verso porta di Damasco.  Bis
+Filename after create_filename(): Palmira._Via_colonnata_verso_porta_di_Damasco._-_DecArch_1-182
 Filename: 182) Palmira. Via colonnata verso porta di Damasco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(51, 65), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tempio di Allat.  Bis
+Filename after create_filename(): Palmira._Tempio_di_Allat._-_DecArch_1-183
 Filename: 183) Palmira. Tempio di Allat. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-184
 Filename: 184) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tempio di Allat, propilei  Bis
+Filename after create_filename(): Palmira._Tempio_di_Allat,_propilei_-_DecArch_1-185
 Filename: 185) Palmira. Tempio di Allat, propilei 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(39, 53), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tempio di Allat.  Bis
+Filename after create_filename(): Palmira._Tempio_di_Allat._-_DecArch_1-186
 Filename: 186) Palmira. Tempio di Allat. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano. . Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano._._-_DecArch_1-187
 Filename: 187) Palmira. Campo di Diocleziano. 20 marzo &apos;93.. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tempio di Allat, propilei.  Bis
+Filename after create_filename(): Palmira._Tempio_di_Allat,_propilei._-_DecArch_1-188
 Filename: 188) Palmira. Tempio di Allat, propilei. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(40, 54), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tempio di Allat.  Bis
+Filename after create_filename(): Palmira._Tempio_di_Allat._-_DecArch_1-189
 Filename: 189) Palmira. Tempio di Allat. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano._-_DecArch_1-190
 Filename: 190) Palmira. Campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-191
 Filename: 191) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-192
 Filename: 192) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-193
 Filename: 193) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-194
 Filename: 194) Palmira. Campo di Diocleziano 20 marzo &apos;93. bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-195
 Filename: 195) Palmira. Campo di Diocleziano 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-196
 Filename: 196) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-197
 Filename: 197) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-198
 Filename: 198) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano. Part.di Alfa 29. Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano._Part.di_Alfa_29._-_DecArch_1-199
 Filename: 199) Palmira. Campo di Diocleziano. Part.di Alfa 29. 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(52, 66), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Palmira. Campo di Diocleziano. Alfa 29.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano._Alfa_29._-_DecArch_1-200
 Filename: 200) Palmira. Campo di Diocleziano. Alfa 29. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano._-_DecArch_1-201
 Filename: 201) Palmira. Campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano._-_DecArch_1-202
 Filename: 202) Palmira. Campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano.  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano._-_DecArch_1-203
 Filename: 203) Palmira. Campo di Diocleziano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-204
 Filename: 204) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-205
 Filename: 205) Palmira. Campo di Diocleziano 20 marz0 &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marz0 &apos;93 &quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-206
 Filename: 206) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-207
 Filename: 207) Palmira. Campo di Diocleziano 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Palmira. Campo di Diocleziano  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano_-_DecArch_1-208
 Filename: 208) Palmira. Campo di Diocleziano 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, pretorio, corte antistante Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_pretorio,_corte_antistante_-_DecArch_1-209
 Filename: 209) Palmira. Campo di Diocleziano, pretorio, corte antistante 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(62, 76), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Palmira. Campo di Diocleziano, Praetorium Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_Praetorium_-_DecArch_1-210
 Filename: 210) Palmira. Campo di Diocleziano, Praetorium 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Palmira. Campo di Diocleziano, Praetorium  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_Praetorium_-_DecArch_1-211
 Filename: 211) Palmira. Campo di Diocleziano, Praetorium 20 marz0 &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marz0 &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, Praetorium  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_Praetorium_-_DecArch_1-212
 Filename: 212) Palmira. Campo di Diocleziano, Praetorium 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, Praetorium  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_Praetorium_-_DecArch_1-213
 Filename: 213) Palmira. Campo di Diocleziano, Praetorium 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, via colonnata di accesso  Bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_via_colonnata_di_accesso_-_DecArch_1-214
 Filename: 214) Palmira. Campo di Diocleziano, via colonnata di accesso 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(60, 74), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Campo di Diocleziano, tetrapilo  bis
+Filename after create_filename(): Palmira._Campo_di_Diocleziano,_tetrapilo_-_DecArch_1-215
 Filename: 215) Palmira. Campo di Diocleziano, tetrapilo 20 marzo &apos;93. bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-216
 Filename: 216) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-217
 Filename: 217) Palmira. Museo. 20 Marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 Marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-218
 Filename: 218) Palmira. Museo. 20 Marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 Marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-219
 Filename: 219) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-220
 Filename: 220) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-221
 Filename: 221) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-222
 Filename: 222) Palmira. Museo. 20 Marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 Marzo &apos;93.&quot;&gt;
 
+Palmira. Museo  Bis
+Filename after create_filename(): Palmira._Museo_-_DecArch_1-223
 Filename: 223) Palmira. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo  Bis
+Filename after create_filename(): Palmira._Museo_-_DecArch_1-224
 Filename: 224) Palmira. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo  Bis
+Filename after create_filename(): Palmira._Museo_-_DecArch_1-225
 Filename: 225) Palmira. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo  Bis
+Filename after create_filename(): Palmira._Museo_-_DecArch_1-226
 Filename: 226) Palmira. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-227
 Filename: 227) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-228
 Filename: 228) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-229
 Filename: 229) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Museo.  Bis
+Filename after create_filename(): Palmira._Museo._-_DecArch_1-230
 Filename: 230) Palmira. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba a ipogeo.  Bis
+Filename after create_filename(): Palmira._Tomba_a_ipogeo._-_DecArch_1-231
 Filename: 231) Palmira. Tomba a ipogeo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba a ipogeo.  Bis
+Filename after create_filename(): Palmira._Tomba_a_ipogeo._-_DecArch_1-232
 Filename: 232) Palmira. Tomba a ipogeo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba a ipogeo.  Bis
+Filename after create_filename(): Palmira._Tomba_a_ipogeo._-_DecArch_1-233
 Filename: 233) Palmira. Tomba a ipogeo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba a ipogeo.  Bis
+Filename after create_filename(): Palmira._Tomba_a_ipogeo._-_DecArch_1-234
 Filename: 234) Palmira. Tomba a ipogeo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba dei 3 fratelli.  Bis
+Filename after create_filename(): Palmira._Tomba_dei_3_fratelli._-_DecArch_1-235
 Filename: 235) Palmira. Tomba dei 3 fratelli. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tombe.  Bis
+Filename after create_filename(): Palmira._Tombe._-_DecArch_1-236
 Filename: 236) Palmira. Tombe. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba dei 3 fratelli.  Bis
+Filename after create_filename(): Palmira._Tomba_dei_3_fratelli._-_DecArch_1-237
 Filename: 237) Palmira. Tomba dei 3 fratelli. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tombe.  Bis
+Filename after create_filename(): Palmira._Tombe._-_DecArch_1-238
 Filename: 238) Palmira. Tombe. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(20, 34), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba dei 3 fratelli.  Bis
+Filename after create_filename(): Palmira._Tomba_dei_3_fratelli._-_DecArch_1-239
 Filename: 239) Palmira. Tomba dei 3 fratelli. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tombe.  Bis
+Filename after create_filename(): Palmira._Tombe._-_DecArch_1-240
 Filename: 240 Palmira. Tombe. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Necropoli, zona tombe a torre.  Bis
+Filename after create_filename(): Palmira._Necropoli,_zona_tombe_a_torre._-_DecArch_1-241
 Filename: 241) Palmira. Necropoli, zona tombe a torre. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Tomba dei 3 fratelli.  Bis
+Filename after create_filename(): Palmira._Tomba_dei_3_fratelli._-_DecArch_1-242
 Filename: 242) Palmira. Tomba dei 3 fratelli. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Peristilio casa.  Bis
+Filename after create_filename(): Palmira._Peristilio_casa._-_DecArch_1-243
 Filename: 243) Palmira. Peristilio casa. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. Peristilio casa  Bis
+Filename after create_filename(): Palmira._Peristilio_casa_-_DecArch_1-244
 Filename: 244) Palmira. Peristilio casa 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Palmira. T. di baal Shamin, porta cella.  Bis
+Filename after create_filename(): Palmira._T._di_baal_Shamin,_porta_cella._-_DecArch_1-245
 Filename: 245) Palmira. T. di baal Shamin, porta cella. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-1
 Filename: 1 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-2
 Filename: 2 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-3
 Filename: 3 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-4
 Filename: 4 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-5
 Filename: 5 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-6
 Filename: 6 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-7
 Filename: 7 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-8
 Filename: 8 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-9
 Filename: 9 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-10
 Filename: 10 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-11
 Filename: 11 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-12
 Filename: 12 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-13
 Filename: 13 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-14
 Filename: 14 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-15
 Filename: 15 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-16
 Filename: 16 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-17
 Filename: 17 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-18
 Filename: 18 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-19
 Filename: 19 Damasco. Museo. 20 Marzo &apos;93 bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-20
 Filename: 20 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-21
 Filename: 21 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Museo. Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-22
 Filename: 22 Damasco. Museo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Philippopoli. Teatro. Bis
+Filename after create_filename(): Philippopoli._Teatro._-_DecArch_2-23
 Filename: 23 Philippopoli. Teatro. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Philippopoli. Mausoleo del padre di Filippo l&apos;Arabo. Iscrizione. Bis
+Filename after create_filename(): Philippopoli._Mausoleo_del_padre_di_Filippo_l&apos;Arabo._Iscrizione._-_DecArch_2-24
 Filename: 24 Philippopoli. Mausoleo del padre di Filippo l&apos;Arabo. Iscrizione. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(67, 81), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Porta del vento. Bis
+Filename after create_filename(): Bosra._Porta_del_vento._-_DecArch_2-25
 Filename: 25 Bosra. Porta del vento. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Via colonnata. Bis
+Filename after create_filename(): Bosra._Via_colonnata._-_DecArch_2-26
 Filename: 26 Bosra. Via colonnata. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Via colonnata. Bis
+Filename after create_filename(): Bosra._Via_colonnata._-_DecArch_2-27
 Filename: 27 Bosra. Via colonnata. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Via colonnata. Bis
+Filename after create_filename(): Bosra._Via_colonnata._-_DecArch_2-28
 Filename: 28 Bosra. Via colonnata. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Bis
+Filename after create_filename(): Bosra._-_DecArch_2-29
 Filename: 29 Bosra. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Bis
+Filename after create_filename(): Bosra._-_DecArch_2-30
 Filename: 30 Bosra. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Via colonnata. Bis
+Filename after create_filename(): Bosra._Via_colonnata._-_DecArch_2-31
 Filename: 31 Bosra. Via colonnata. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Ninfeo. Bis
+Filename after create_filename(): Bosra._Ninfeo._-_DecArch_2-32
 Filename: 32 Bosra. Ninfeo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Ninfeo. Bis
+Filename after create_filename(): Bosra._Ninfeo._-_DecArch_2-33
 Filename: 33 Bosra. Ninfeo. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Kalibe. Bis
+Filename after create_filename(): Bosra._Kalibe._-_DecArch_2-34
 Filename: 34 Bosra. Kalibe. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Kalibe. Bis
+Filename after create_filename(): Bosra._Kalibe._-_DecArch_2-35
 Filename: 35 Bosra. Kalibe. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Via colonnata. Bis
+Filename after create_filename(): Bosra._Via_colonnata._-_DecArch_2-36
 Filename: 36 Bosra. Via colonnata. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Via colonnata. Bis
+Filename after create_filename(): Bosra._Via_colonnata._-_DecArch_2-37
 Filename: 37 Bosra. Via colonnata. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra ( part. di K 24). Bis
+Filename after create_filename(): Bosra_(_part._di_K_24)._-_DecArch_2-38
 Filename: 38 Bosra ( part. di K 24). 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Bis
+Filename after create_filename(): Bosra._-_DecArch_2-39
 Filename: 39 Bosra. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra (K 24). Bis
+Filename after create_filename(): Bosra_(K_24)._-_DecArch_2-40
 Filename: 40 Bosra (K 24). 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(16, 30), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Bis
+Filename after create_filename(): Bosra._-_DecArch_2-41
 Filename: 41 Bosra. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Bis
+Filename after create_filename(): Bosra._-_DecArch_2-42
 Filename: 42 Bosra. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Bis
+Filename after create_filename(): Bosra._-_DecArch_2-43
 Filename: 43 Bosra. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Bis
+Filename after create_filename(): Bosra._-_DecArch_2-44
 Filename: 44 Bosra. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra (part. di K 18). Bis
+Filename after create_filename(): Bosra_(part._di_K_18)._-_DecArch_2-45
 Filename: 45 Bosra (part. di K 18). 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(25, 39), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra (K 18). Bis
+Filename after create_filename(): Bosra_(K_18)._-_DecArch_2-46
 Filename: 46 Bosra (K 18). 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(16, 30), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Pretorio. Bis
+Filename after create_filename(): Bosra._Pretorio._-_DecArch_2-47
 Filename: 47 Bosra. Pretorio. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Antiquarium Teatro. Bis
+Filename after create_filename(): Bosra._Antiquarium_Teatro._-_DecArch_2-48
 Filename: 48 Bosra. Antiquarium Teatro. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Antiquarium Teatro. Bis
+Filename after create_filename(): Bosra._Antiquarium_Teatro._-_DecArch_2-49
 Filename: 49 Bosra. Antiquarium Teatro. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Bosra. Antiquarium Teatro. Bis
+Filename after create_filename(): Bosra._Antiquarium_Teatro._-_DecArch_2-50
 Filename: 50 Bosra. Antiquarium Teatro. 20 Marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 Marzo &apos;93 &quot;&gt;
 
+Damasco. Grande Moschea, lato sud.  Bis
+Filename after create_filename(): Damasco._Grande_Moschea,_lato_sud._-_DecArch_2-51
 Filename: 51 Damasco. Grande Moschea, lato sud. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Temenos Tempio di Zeus (se Grande Moschea).  Bis
+Filename after create_filename(): Damasco._Temenos_Tempio_di_Zeus_(se_Grande_Moschea)._-_DecArch_2-52
 Filename: 52 Damasco. Temenos Tempio di Zeus (se Grande Moschea). 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(55, 69), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Granse Moschea, lato sud.  Bis
+Filename after create_filename(): Damasco._Granse_Moschea,_lato_sud._-_DecArch_2-53
 Filename: 53 Damasco. Granse Moschea, lato sud. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Temenos Tempio di Zeus (se Grande Moschea).  Bis
+Filename after create_filename(): Damasco._Temenos_Tempio_di_Zeus_(se_Grande_Moschea)._-_DecArch_2-54
 Filename: 54 Damasco. Temenos Tempio di Zeus (se Grande Moschea). 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(55, 69), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Propilei della Grande Moschea.  Bis
+Filename after create_filename(): Damasco._Propilei_della_Grande_Moschea._-_DecArch_2-55
 Filename: 55 Damasco. Propilei della Grande Moschea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Propilei della Grande Moschea.  Bis
+Filename after create_filename(): Damasco._Propilei_della_Grande_Moschea._-_DecArch_2-56
 Filename: 56 Damasco. Propilei della Grande Moschea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Propilei della Grande Moschea.  Bis
+Filename after create_filename(): Damasco._Propilei_della_Grande_Moschea._-_DecArch_2-57
 Filename: 57 Damasco. Propilei della Grande Moschea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Propilei della Grande Moschea,  Bis
+Filename after create_filename(): Damasco._Propilei_della_Grande_Moschea,_-_DecArch_2-58
 Filename: 58 Damasco. Propilei della Grande Moschea, 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moschea, casa delle campane  Bis
+Filename after create_filename(): Damasco._Grande_Moschea,_casa_delle_campane_-_DecArch_2-59
 Filename: 59 Damasco. Grande Moschea, casa delle campane 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moschea, casa delle campane.  Bis
+Filename after create_filename(): Damasco._Grande_Moschea,_casa_delle_campane._-_DecArch_2-60
 Filename: 60 Damasco. Grande Moschea, casa delle campane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(47, 61), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, casa delle campane.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_casa_delle_campane._-_DecArch_2-61
 Filename: 61 Damasco. Grande Moscea, casa delle campane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, casa delle campane.  Bis.
+Filename after create_filename(): Damasco._Grande_Moscea,_casa_delle_campane._._-_DecArch_2-62
 Filename: 62 Damasco. Grande Moscea, casa delle campane. 20 marzo &apos;93. Bis..jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, casa delle campane.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_casa_delle_campane._-_DecArch_2-63
 Filename: 63 Damasco. Grande Moscea, casa delle campane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, casa delle campane.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_casa_delle_campane._-_DecArch_2-64
 Filename: 64 Damasco. Grande Moscea, casa delle campane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, casa delle campane.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_casa_delle_campane._-_DecArch_2-65
 Filename: 65 Damasco. Grande Moscea, casa delle campane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, casa delle campane.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_casa_delle_campane._-_DecArch_2-66
 Filename: 66 Damasco. Grande Moscea, casa delle campane. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(46, 60), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea._-_DecArch_2-67
 Filename: 67 Damasco. Grande Moscea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea._-_DecArch_2-68
 Filename: 68 Damasco. Grande Moscea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, Tesoro.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_Tesoro._-_DecArch_2-69
 Filename: 69 Damasco. Grande Moscea, Tesoro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, Tesoro.  Bis.
+Filename after create_filename(): Damasco._Grande_Moscea,_Tesoro._._-_DecArch_2-70
 Filename: 70 Damasco. Grande Moscea, Tesoro. 20 marzo &apos;93. Bis..jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, Tesoro.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_Tesoro._-_DecArch_2-71
 Filename: 71 Damasco. Grande Moscea, Tesoro. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, Tesoro. Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_Tesoro._-_DecArch_2-72
 Filename: 72 Damasco. Grande Moscea, Tesoro. 20 marzo &apos;93.Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, opus sectile portico est.  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_opus_sectile_portico_est._-_DecArch_2-73
 Filename: 73 Damasco. Grande Moscea, opus sectile portico est. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(52, 66), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, mosaico portico ovest. Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_mosaico_portico_ovest._-_DecArch_2-74
 Filename: 74 Damasco. Grande Moscea, mosaico portico ovest. 20 marzo &apos;93.Bis.jpg
 Match: &lt;regex.Match object; span=(49, 63), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, Mosaico facciata  Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_Mosaico_facciata_-_DecArch_2-75
 Filename: 75 Damasco. Grande Moscea, Mosaico facciata 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(43, 57), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Grande Moscea, Facciata, Bis
+Filename after create_filename(): Damasco._Grande_Moscea,_Facciata,_-_DecArch_2-76
 Filename: 76 Damasco. Grande Moscea, Facciata, 20 marzo &apos;93.Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-77
 Filename: 77 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-78
 Filename: 78 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-79
 Filename: 79 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-80
 Filename: 80 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-81
 Filename: 81 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-82
 Filename: 82 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-83
 Filename: 83 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-84
 Filename: 84 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-85
 Filename: 85 Damasco. Museo 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(17, 31), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo  Bis
+Filename after create_filename(): Damasco._Museo_-_DecArch_2-86
 Filename: 86 Damasco. Museo 23 marzo &apos;93. Bis.jpg
 Match: None
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-87
 Filename: 87 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-88
 Filename: 88 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-89
 Filename: 89 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-90
 Filename: 90 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-91
 Filename: 91 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-92
 Filename: 92 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-93
 Filename: 93 Damasco. Museo. 20 arzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 31), match=&quot; 20 arzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-94
 Filename: 94 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-95
 Filename: 95 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-96
 Filename: 96 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-97
 Filename: 97 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-98
 Filename: 98 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-99
 Filename: 99 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Museo.  Bis
+Filename after create_filename(): Damasco._Museo._-_DecArch_2-100
 Filename: 100 Damasco. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-101
 Filename: 101 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis..
+Filename after create_filename(): Apamea._.._-_DecArch_2-102
 Filename: 102 Apamea. 20 marzo &apos;93. Bis...jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-103
 Filename: 103 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-104
 Filename: 104 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-105
 Filename: 105 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea  Bis
+Filename after create_filename(): Apamea_-_DecArch_2-106
 Filename: 106 Apamea 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(10, 24), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-107
 Filename: 107 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-108
 Filename: 108 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea  Bis
+Filename after create_filename(): Apamea_-_DecArch_2-109
 Filename: 109 Apamea 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(10, 24), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-110
 Filename: 110 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-111
 Filename: 111 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-112
 Filename: 112 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-113
 Filename: 113 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-114
 Filename: 114 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-115
 Filename: 115 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-116
 Filename: 116 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-117
 Filename: 117 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-118
 Filename: 118 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-119
 Filename: 119 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-120
 Filename: 120 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-121
 Filename: 121 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-122
 Filename: 122 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. , Bis
+Filename after create_filename(): Apamea._,_-_DecArch_2-123
 Filename: 123 Apamea. 20 marzo &apos;93, Bis.jpg
 Match: &lt;regex.Match object; span=(11, 24), match=&quot; 20 marzo &apos;93&quot;&gt;
 
+Ebla.  Bis
+Filename after create_filename(): Ebla._-_DecArch_2-124
 Filename: 124 Ebla. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea
+Filename after create_filename(): Apamea_-_DecArch_2-125
 Filename: 125 Apamea. 20 Marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 Marzo &apos;93.&quot;&gt;
 
+Ebla.  Bis
+Filename after create_filename(): Ebla._-_DecArch_2-126
 Filename: 126 Ebla. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-127
 Filename: 127 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Ebla.  Bis
+Filename after create_filename(): Ebla._-_DecArch_2-128
 Filename: 128 Ebla. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-129
 Filename: 129 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Ebla.  Bis
+Filename after create_filename(): Ebla._-_DecArch_2-130
 Filename: 130 Ebla. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(9, 23), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-131
 Filename: 131 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Tempio ittita di Ain Dara.  Bis
+Filename after create_filename(): Tempio_ittita_di_Ain_Dara._-_DecArch_2-132
 Filename: 132 Tempio ittita di Ain Dara. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-133
 Filename: 133 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Tempio ittita di Ain Dara.  Bis
+Filename after create_filename(): Tempio_ittita_di_Ain_Dara._-_DecArch_2-134
 Filename: 134 Tempio ittita di Ain Dara. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Ain Dara.  Bis
+Filename after create_filename(): Ain_Dara._-_DecArch_2-135
 Filename: 135 Ain Dara. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(13, 27), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-136
 Filename: 136 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Ain Dara.  Bis
+Filename after create_filename(): Ain_Dara._-_DecArch_2-137
 Filename: 137 Ain Dara. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(13, 27), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Bis
+Filename after create_filename(): Apamea._-_DecArch_2-138
 Filename: 138 Apamea. 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-139
 Filename: 139 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Bis
+Filename after create_filename(): Santuario_San_Simeone._-_DecArch_2-140
 Filename: 140 Santuario San Simeone. 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-141
 Filename: 141 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Chiesa esterna.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Chiesa_esterna._-_DecArch_2-142
 Filename: 142 Santuario San Simeone. Chiesa esterna. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-143
 Filename: 143 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Chiesa esterna.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Chiesa_esterna._-_DecArch_2-144
 Filename: 144 Santuario San Simeone. Chiesa esterna. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-145
 Filename: 145 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Chiesa esterna. Portale sul fianco.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Chiesa_esterna._Portale_sul_fianco._-_DecArch_2-146
 Filename: 146 Santuario San Simeone. Chiesa esterna. Portale sul fianco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(62, 76), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Bis
+Filename after create_filename(): Apamea._-_DecArch_2-147
 Filename: 147 Apamea. 20 marzo &apos;93 Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93 &quot;&gt;
 
+Santuario San Simeone. Chiesa esterna.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Chiesa_esterna._-_DecArch_2-148
 Filename: 148 Santuario San Simeone. Chiesa esterna. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+149 Apamea. Alfa 31. Bis
+Filename after create_filename(): 149_Apamea._Alfa_31._-_DecArch_2-149
 Filename: 149 Apamea. Alfa 31. Bis.jpg
 Match: None
 
+Santuario San Simeone. Chiesa esterna. Portale sul fianco.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Chiesa_esterna._Portale_sul_fianco._-_DecArch_2-150
 Filename: 150 Santuario San Simeone. Chiesa esterna. Portale sul fianco. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(62, 76), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-151
 Filename: 151 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Porta ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Porta_ingresso._-_DecArch_2-152
 Filename: 152 Santuario San Simeone. Porta ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-153
 Filename: 153 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Porta ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Porta_ingresso._-_DecArch_2-154
 Filename: 154 Santuario San Simeone. Porta ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-155
 Filename: 155 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Porta ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Porta_ingresso._-_DecArch_2-156
 Filename: 156 Santuario San Simeone. Porta ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-157
 Filename: 157 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone.  Bis
+Filename after create_filename(): Santuario_San_Simeone._-_DecArch_2-158
 Filename: 158 Santuario San Simeone. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(26, 40), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-159
 Filename: 159 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Facciata ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Facciata_ingresso._-_DecArch_2-160
 Filename: 160 Santuario San Simeone. Facciata ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea maggio Bis
+Filename after create_filename(): Apamea_maggio_-_DecArch_2-161
 Filename: 161 Apamea maggio &apos;93. Bis.jpg
 Match: None
 
+Santuario San Simeone. Facciata ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Facciata_ingresso._-_DecArch_2-162
 Filename: 162 Santuario San Simeone. Facciata ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-163
 Filename: 163 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Facciata ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Facciata_ingresso._-_DecArch_2-164
 Filename: 164 Santuario San Simeone. Facciata ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea.  Bis
+Filename after create_filename(): Apamea._-_DecArch_2-165
 Filename: 165 Apamea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Facciata ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Facciata_ingresso._-_DecArch_2-166
 Filename: 166 Santuario San Simeone. Facciata ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-167
 Filename: 167 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario San Simeone. Facciata ingresso.  Bis
+Filename after create_filename(): Santuario_San_Simeone._Facciata_ingresso._-_DecArch_2-168
 Filename: 168 Santuario San Simeone. Facciata ingresso. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(45, 59), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-169
 Filename: 169 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Nartece della facciata.20 marzo Bis
+Filename after create_filename(): San_Simeone._Nartece_della_facciata.20_marzo_-_DecArch_2-170
 Filename: 170 San Simeone. Nartece della facciata.20 marzo &apos;93. Bis.jpg
 Match: None
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-171
 Filename: 171 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Nartece.  Bis
+Filename after create_filename(): San_Simeone._Nartece._-_DecArch_2-172
 Filename: 172 San Simeone. Nartece. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(25, 39), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-173
 Filename: 173 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Nartece.  Bis
+Filename after create_filename(): San_Simeone._Nartece._-_DecArch_2-174
 Filename: 174 San Simeone. Nartece. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(25, 39), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium  Bis
+Filename after create_filename(): Apamea._Antiquarium_-_DecArch_2-175
 Filename: 175 Apamea. Antiquarium 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(23, 37), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Nartece sopra il portale.  Bis
+Filename after create_filename(): San_Simeone._Nartece_sopra_il_portale._-_DecArch_2-176
 Filename: 176 San Simeone. Nartece sopra il portale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(42, 56), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-177
 Filename: 177 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. nartece finestra laterale
+Filename after create_filename(): San_Simeone._nartece_finestra_laterale_-_DecArch_2-178
 Filename: 178 San Simeone. nartece finestra laterale. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(43, 57), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-179
 Filename: 179 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Ottagono centrale.  Bis
+Filename after create_filename(): San_Simeone._Ottagono_centrale._-_DecArch_2-180
 Filename: 180 San Simeone. Ottagono centrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-181
 Filename: 181 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Ottagono centrale.  Bis
+Filename after create_filename(): San_Simeone._Ottagono_centrale._-_DecArch_2-182
 Filename: 182 San Simeone. Ottagono centrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis.
+Filename after create_filename(): Apamea._Antiquarium._._-_DecArch_2-183
 Filename: 183 Apamea. Antiquarium. 20 marzo &apos;93. Bis..jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Ottagono centrale.  Bis
+Filename after create_filename(): San_Simeone._Ottagono_centrale._-_DecArch_2-184
 Filename: 184 San Simeone. Ottagono centrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Apamea. Antiquarium.  Bis
+Filename after create_filename(): Apamea._Antiquarium._-_DecArch_2-185
 Filename: 185 Apamea. Antiquarium. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(24, 38), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Esterno bas. dx. 6 bas. centr.  Bis.
+Filename after create_filename(): San_Simeone._Esterno_bas._dx._6_bas._centr._._-_DecArch_2-186
 Filename: 186 San Simeone. Esterno bas. dx. 6 bas. centr. 20 marzo &apos;93. Bis..jpg
 Match: &lt;regex.Match object; span=(47, 61), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Bab Sharki (porta).  Bis
+Filename after create_filename(): Damasco._Bab_Sharki_(porta)._-_DecArch_2-187
 Filename: 187 Damasco. Bab Sharki (porta). 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(32, 46), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Esterno giunzione tra bas. dx. e bas. centr.  Bis
+Filename after create_filename(): San_Simeone._Esterno_giunzione_tra_bas._dx._e_bas._centr._-_DecArch_2-188
 Filename: 188 San Simeone. Esterno giunzione tra bas. dx. e bas. centr. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(61, 75), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco presso arco romano.  Bis
+Filename after create_filename(): Damasco_presso_arco_romano._-_DecArch_2-189
 Filename: 189 Damasco presso arco romano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(31, 45), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Decorazione abside esterna ottagono centrale.  Bis
+Filename after create_filename(): San_Simeone._Decorazione_abside_esterna_ottagono_centrale._-_DecArch_2-190
 Filename: 190 San Simeone. Decorazione abside esterna ottagono centrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(62, 76), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Arco romano.  Bis
+Filename after create_filename(): Damasco._Arco_romano._-_DecArch_2-191
 Filename: 191 Damasco. Arco romano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(25, 39), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Esterno abside basilica dx.  Bis
+Filename after create_filename(): San_Simeone._Esterno_abside_basilica_dx._-_DecArch_2-192
 Filename: 192 San Simeone. Esterno abside basilica dx. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Arco romano.  Bis
+Filename after create_filename(): Damasco._Arco_romano._-_DecArch_2-193
 Filename: 193 Damasco. Arco romano. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(25, 39), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. 1°ordine decorazione esterna abside basilica dx.  Bis
+Filename after create_filename(): San_Simeone._1°ordine_decorazione_esterna_abside_basilica_dx._-_DecArch_2-194
 Filename: 194 San Simeone. 1°ordine decorazione esterna abside basilica dx. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(65, 79), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Temenos T. di Zeus (forse) V. N. 28.  Bis
+Filename after create_filename(): Damasco._Temenos_T._di_Zeus_(forse)_V._N._28._-_DecArch_2-195
 Filename: 195 Damasco. Temenos T. di Zeus (forse) V. N. 28. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(49, 63), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Basilica dx.  Bis
+Filename after create_filename(): San_Simeone._Basilica_dx._-_DecArch_2-196
 Filename: 196 San Simeone. Basilica dx. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(29, 43), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Temenos T. di Zeus (forse) V. N. 28.  Bis
+Filename after create_filename(): Damasco._Temenos_T._di_Zeus_(forse)_V._N._28._-_DecArch_2-197
 Filename: 197 Damasco. Temenos T. di Zeus (forse) V. N. 28. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(49, 63), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Abside basilica destra.  Bis
+Filename after create_filename(): San_Simeone._Abside_basilica_destra._-_DecArch_2-198
 Filename: 198 San Simeone. Abside basilica destra. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(40, 54), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Damasco. Temenos T. di Zeus (forse). Retro Moschea.  Bis
+Filename after create_filename(): Damasco._Temenos_T._di_Zeus_(forse)._Retro_Moschea._-_DecArch_2-199
 Filename: 199 Damasco. Temenos T. di Zeus (forse). Retro Moschea. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(55, 69), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+San Simeone. Abside basilica dx.  Bis
+Filename after create_filename(): San_Simeone._Abside_basilica_dx._-_DecArch_2-200
 Filename: 200 San Simeone. Abside basilica dx. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(36, 50), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-201
 Filename: 201 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-202
 Filename: 202 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-203
 Filename: 203 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-204
 Filename: 204 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-205
 Filename: 205 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-206
 Filename: 206 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-207
 Filename: 207 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion. Decorazioni absidi laterali (forse).  Bis
+Filename after create_filename(): Sergiopolis._Martirion._Decorazioni_absidi_laterali_(forse)._-_DecArch_2-208
 Filename: 208 Sergiopolis. Martirion. Decorazioni absidi laterali (forse). 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(64, 78), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion. Decorazioni absidi laterali (forse).  Bis
+Filename after create_filename(): Sergiopolis._Martirion._Decorazioni_absidi_laterali_(forse)._-_DecArch_2-209
 Filename: 209 Sergiopolis. Martirion. Decorazioni absidi laterali (forse). 20 arzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(64, 77), match=&quot; 20 arzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion. Decorazione absidie.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._Decorazione_absidie._-_DecArch_2-210
 Filename: 210 Sergiopolis. Martirion. Decorazione absidie. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta sud.  Bis
+Filename after create_filename(): Sergiopolis._Porta_sud._-_DecArch_2-211
 Filename: 211 Sergiopolis. Porta sud. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  Bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-212
 Filename: 212 Sergiopolis. Martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion.  bis
+Filename after create_filename(): Sergiopolis._Martirion._-_DecArch_2-213
 Filename: 213 Sergiopolis. Martirion. 20 marzo &apos;93. bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta nord.  Bis
+Filename after create_filename(): Sergiopolis._Porta_nord._-_DecArch_2-214
 Filename: 214 Sergiopolis. Porta nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Basilica centrale.  Bis
+Filename after create_filename(): Sergiopolis._Basilica_centrale._-_DecArch_2-215
 Filename: 215 Sergiopolis. Basilica centrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(35, 49), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta nord.  Bis
+Filename after create_filename(): Sergiopolis._Porta_nord._-_DecArch_2-216
 Filename: 216 Sergiopolis. Porta nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta nord.  Bis
+Filename after create_filename(): Sergiopolis._Porta_nord._-_DecArch_2-217
 Filename: 217 Sergiopolis. Porta nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta nord.  Bis
+Filename after create_filename(): Sergiopolis._Porta_nord._-_DecArch_2-218
 Filename: 218 Sergiopolis. Porta nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta nord.  Bis
+Filename after create_filename(): Sergiopolis._Porta_nord._-_DecArch_2-219
 Filename: 219 Sergiopolis. Porta nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta nord.  Bis
+Filename after create_filename(): Sergiopolis._Porta_nord._-_DecArch_2-220
 Filename: 220 Sergiopolis. Porta nord. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Porta nord. Via colonnata.  Bis
+Filename after create_filename(): Sergiopolis._Porta_nord._Via_colonnata._-_DecArch_2-221
 Filename: 221 Sergiopolis. Porta nord. Via colonnata. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(43, 57), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Rasafa Sergiopolis. Mura lato sud e angolo s-w dall&apos;interno.  Bis
+Filename after create_filename(): Rasafa_Sergiopolis._Mura_lato_sud_e_angolo_s-w_dall&apos;interno._-_DecArch_2-222
 Filename: 222 Rasafa Sergiopolis. Mura lato sud e angolo s-w dall&apos;interno. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(64, 78), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Mura lato ovest dal martirion.  Bis
+Filename after create_filename(): Sergiopolis._Mura_lato_ovest_dal_martirion._-_DecArch_2-223
 Filename: 223 Sergiopolis. Mura lato ovest dal martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(47, 61), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Cisterna s.w.  Bis
+Filename after create_filename(): Sergiopolis._Cisterna_s.w._-_DecArch_2-224
 Filename: 224 Sergiopolis. Cisterna s.w. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Mura lato nord e martirion.  Bis
+Filename after create_filename(): Sergiopolis._Mura_lato_nord_e_martirion._-_DecArch_2-225
 Filename: 225 Sergiopolis. Mura lato nord e martirion. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Mura lato nord dalla basilica centrale.  Bis
+Filename after create_filename(): Sergiopolis._Mura_lato_nord_dalla_basilica_centrale._-_DecArch_2-226
 Filename: 226 Sergiopolis. Mura lato nord dalla basilica centrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(56, 70), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. la città da sud est.  Bis
+Filename after create_filename(): Sergiopolis._la_città_da_sud_est._-_DecArch_2-227
 Filename: 227 Sergiopolis. la città da sud est. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(37, 51), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-228
 Filename: 228 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-229
 Filename: 229 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-230
 Filename: 230 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-231
 Filename: 231 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-232
 Filename: 232 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-233
 Filename: 233 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-234
 Filename: 234 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-235
 Filename: 235 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-236
 Filename: 236 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-237
 Filename: 237 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-238
 Filename: 238 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo
+Filename after create_filename(): Aleppo._Museo_-_DecArch_2-239
 Filename: 239 Aleppo. Museo. 20 marzo &apos;93.JPG
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-240
 Filename: 240 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-241
 Filename: 241 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-242
 Filename: 242 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.j  Bis
+Filename after create_filename(): Aleppo._Museo.j_-_DecArch_2-243
 Filename: 243 Aleppo. Museo.j 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(19, 33), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-244
 Filename: 244 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Aleppo. Museo.  Bis
+Filename after create_filename(): Aleppo._Museo._-_DecArch_2-245
 Filename: 245 Aleppo. Museo. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(18, 32), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+S. Simeone. Battistero.  Bis
+Filename after create_filename(): S._Simeone._Battistero._-_DecArch_2-246
 Filename: 246 S. Simeone. Battistero. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario di S. Simeone.  Bis
+Filename after create_filename(): Santuario_di_S._Simeone._-_DecArch_2-247
 Filename: 247 Santuario di S. Simeone. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario di S. Simeone.  Bis
+Filename after create_filename(): Santuario_di_S._Simeone._-_DecArch_2-248
 Filename: 248 Santuario di S. Simeone. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario di S. Simeone.  Bis
+Filename after create_filename(): Santuario_di_S._Simeone._-_DecArch_2-249
 Filename: 249 Santuario di S. Simeone. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario di S. Simeone.  Bis
+Filename after create_filename(): Santuario_di_S._Simeone._-_DecArch_2-250
 Filename: 250 Santuario di S. Simeone. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Santuario di S. Simeone. Abside basilica dx.  Bis
+Filename after create_filename(): Santuario_di_S._Simeone._Abside_basilica_dx._-_DecArch_2-251
 Filename: 251 Santuario di S. Simeone. Abside basilica dx. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(48, 62), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Cattedrale.  Bis
+Filename after create_filename(): Sergiopolis._Cattedrale._-_DecArch_2-252
 Filename: 252 Sergiopolis. Cattedrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Cattedrale.  Bis
+Filename after create_filename(): Sergiopolis._Cattedrale._-_DecArch_2-253
 Filename: 253 Sergiopolis. Cattedrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Cattedrale.  Bis
+Filename after create_filename(): Sergiopolis._Cattedrale._-_DecArch_2-254
 Filename: 254 Sergiopolis. Cattedrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Cattedrale. Navata dx.  Bis
+Filename after create_filename(): Sergiopolis._Cattedrale._Navata_dx._-_DecArch_2-255
 Filename: 255 Sergiopolis. Cattedrale. Navata dx. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(39, 53), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. cattedrale navata centrale.  Bis
+Filename after create_filename(): Sergiopolis._cattedrale_navata_centrale._-_DecArch_2-256
 Filename: 256 Sergiopolis. cattedrale navata centrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(44, 58), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. cattedrale.  Bis
+Filename after create_filename(): Sergiopolis._cattedrale._-_DecArch_2-257
 Filename: 257 Sergiopolis. cattedrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. cattedrale.  Bis
+Filename after create_filename(): Sergiopolis._cattedrale._-_DecArch_2-258
 Filename: 258 Sergiopolis. cattedrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. cattedrale.  Bis
+Filename after create_filename(): Sergiopolis._cattedrale._-_DecArch_2-259
 Filename: 259 Sergiopolis. cattedrale. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(28, 42), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martirion dec. abside.  Bis
+Filename after create_filename(): Sergiopolis._Martirion_dec._abside._-_DecArch_2-260
 Filename: 260 Sergiopolis. Martirion dec. abside. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(39, 53), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Basilica centrle.  Bis
+Filename after create_filename(): Sergiopolis._Basilica_centrle._-_DecArch_2-261
 Filename: 261 Sergiopolis. Basilica centrle. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Basilica centrle.  Bis
+Filename after create_filename(): Sergiopolis._Basilica_centrle._-_DecArch_2-262
 Filename: 262 Sergiopolis. Basilica centrle. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Basilica centrle.  Bis
+Filename after create_filename(): Sergiopolis._Basilica_centrle._-_DecArch_2-263
 Filename: 263 Sergiopolis. Basilica centrle. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Basilica centrle.  Bis
+Filename after create_filename(): Sergiopolis._Basilica_centrle._-_DecArch_2-264
 Filename: 264 Sergiopolis. Basilica centrle. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Basilica centrle.  Bis
+Filename after create_filename(): Sergiopolis._Basilica_centrle._-_DecArch_2-265
 Filename: 265 Sergiopolis. Basilica centrle. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Basilica centrle.  Bis
+Filename after create_filename(): Sergiopolis._Basilica_centrle._-_DecArch_2-266
 Filename: 266 Sergiopolis. Basilica centrle. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(34, 48), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martiryon.  Bis
+Filename after create_filename(): Sergiopolis._Martiryon._-_DecArch_2-267
 Filename: 267 Sergiopolis. Martiryon. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martiryon.  Bis
+Filename after create_filename(): Sergiopolis._Martiryon._-_DecArch_2-268
 Filename: 268 Sergiopolis. Martiryon. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Sergiopolis. Martiryon.  Bis
+Filename after create_filename(): Sergiopolis._Martiryon._-_DecArch_2-269
 Filename: 269 Sergiopolis. Martiryon. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(27, 41), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Dura Europos.  Bis
+Filename after create_filename(): Dura_Europos._-_DecArch_3-1
 Filename: 1 Dura Europos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(15, 29), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Dura Europos.  Bis
+Filename after create_filename(): Dura_Europos._-_DecArch_3-2
 Filename: 2 Dura Europos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(15, 29), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Dura Europos.  Bis
+Filename after create_filename(): Dura_Europos._-_DecArch_3-3
 Filename: 3 Dura Europos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(15, 29), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Dura Europos.  Bis
+Filename after create_filename(): Dura_Europos._-_DecArch_3-4
 Filename: 4 Dura Europos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(15, 29), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Dura Europos.  Bis
+Filename after create_filename(): Dura_Europos._-_DecArch_3-5
 Filename: 5 Dura Europos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(15, 29), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Dura Europos.  Bis
+Filename after create_filename(): Dura_Europos._-_DecArch_3-6
 Filename: 6 Dura Europos. 20 marzo&apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(15, 28), match=&quot; 20 marzo&apos;93.&quot;&gt;
 
+Dura Europos.  Bis
+Filename after create_filename(): Dura_Europos._-_DecArch_3-7
 Filename: 7 Dura Europos. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(15, 29), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Dura Europos  Bis
+Filename after create_filename(): Dura_Europos_-_DecArch_3-8
 Filename: 8 Dura Europos 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(14, 28), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Mari.  Bis
+Filename after create_filename(): Mari._-_DecArch_3-9
 Filename: 9 Mari. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(7, 21), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Mari.  Bis
+Filename after create_filename(): Mari._-_DecArch_3-10
 Filename: 10 Mari. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(8, 22), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Mari.  Bis
+Filename after create_filename(): Mari._-_DecArch_3-11
 Filename: 11 Mari. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(8, 22), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-12
 Filename: 12 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-13
 Filename: 13 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-14
 Filename: 14 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-15
 Filename: 15 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia. Pretorio.  Bis
+Filename after create_filename(): Zenobia._Pretorio._-_DecArch_3-16
 Filename: 16 Zenobia. Pretorio. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(21, 35), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-17
 Filename: 17 Zenobia. 2&apos; marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 2&apos; marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-18
 Filename: 18 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-19
 Filename: 19 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-20
 Filename: 20 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia.  Bis
+Filename after create_filename(): Zenobia._-_DecArch_3-21
 Filename: 21 Zenobia. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(11, 25), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
+Zenobia-Halacve e zalabiye.  Bis
+Filename after create_filename(): Zenobia-Halacve_e_zalabiye._-_DecArch_3-22
 Filename: 22 Zenobia-Halacve e zalabiye. 20 marzo &apos;93. Bis.jpg
 Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&quot;&gt;
 
@@ -2669,7 +3742,7 @@ Match: &lt;regex.Match object; span=(30, 44), match=&quot; 20 marzo &apos;93.&qu
 <pre>
 <span class="ansired">---------------------------------------------------------------------------</span>
 <span class="ansired">NameError</span>                                 Traceback (most recent call last)
-<span class="ansigreen">&lt;ipython-input-11-38d48b672f5e&gt;</span> in <span class="ansicyan">&lt;module&gt;</span><span class="ansiblue">()</span>
+<span class="ansigreen">&lt;ipython-input-68-72d8e8881e11&gt;</span> in <span class="ansicyan">&lt;module&gt;</span><span class="ansiblue">()</span>
 <span class="ansigreen">    218</span>     outfile<span class="ansiblue">.</span>write<span class="ansiblue">(</span><span class="ansiblue">&quot;\n&quot;</span><span class="ansiblue">.</span>join<span class="ansiblue">(</span>template_parts<span class="ansiblue">)</span> <span class="ansiblue">+</span> <span class="ansiblue">&quot;\n&quot;</span> <span class="ansiblue">+</span> <span class="ansiblue">&quot;\n&quot;</span><span class="ansiblue">.</span>join<span class="ansiblue">(</span>categories_list<span class="ansiblue">)</span><span class="ansiblue">)</span><span class="ansiblue"></span>
 <span class="ansigreen">    219</span> <span class="ansiblue"></span>
 <span class="ansigreen">--&gt; 220</span><span class="ansired"> </span>filename_file<span class="ansiblue">.</span>close<span class="ansiblue">(</span><span class="ansiblue">)</span><span class="ansiblue"></span>

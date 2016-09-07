@@ -70,7 +70,9 @@ def move_matching_files(files, data, out_dir):
             path_name, ext = os.path.splitext(in_path)
             file_name_out = u'{}{}'.format(data[key][u'Commons'], ext)
             out_path = common.modify_path(out_dir, file_name_out)
-            os.rename(in_path, out_path)
+            # Switched to os.renames from Andŕes os.rename since it causes error:
+            # Not removing non-empty directory: ... 
+            os.renames(in_path, out_path) 
 
 
 def copy_info_files(info_dir, data, out_dir):
@@ -94,7 +96,7 @@ def main(*args):
     """Command line entry point"""
     in_file = u'DecArch_Syria_2016_08/filenames_mapping.csv'
     info_dir = u'photograph_template_texts'
-    base_dir = u'/media/mos/USB DISK/GAR_pictures_for_WMSE_AC'
+    base_dir = u'/media/mos/USB DISK/DecArch'
     out_dir = u'renamed'
 
     for arg in args:

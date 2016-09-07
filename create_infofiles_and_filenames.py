@@ -53,7 +53,7 @@ metadata_it.tail(2)
 metadata_en.tail(10)
 
 
-# In[10]:
+# In[5]:
 
 merged = pd.concat([metadata_it,metadata_en], axis=1) 
 merged.tail(2)
@@ -61,9 +61,10 @@ merged.tail(2)
 
 # # Create filenames
 
-# In[5]:
+# In[67]:
 
 def create_filename(row_object):
+    import os
     """Takes a DataFrame row from the 'merged' dataframe and returns a string filename."""
     # remove all underscores
     no_underscores = regex.sub(r"_", " ", row["Filename"])
@@ -76,7 +77,7 @@ def create_filename(row_object):
     #print(ext)
     
     # <Filename_1_clean> = <Filename1> with "20 marzo..." removed, any dubble spaces replaced by single ones 
-    # and finally the spaces substituted by underscores (_). Also remove the file type extension.
+    # and finally the spaces substituted by underscores (_). 
     yeardate_patt = regex.compile(r" \d+[o']? m? ?arz[o0p] ?'?\d+[\. ]?",flags=regex.I)
     year_patt = regex.compile(r" '\d\d[\.,]? ",flags=regex.I)
     
@@ -93,8 +94,9 @@ def create_filename(row_object):
         filename_1_clean = row["Filename"]
     
     # Remove the extension from filename_1_clean
-    ext_patt = regex.compile(ext, flags=regex.I)
-    filename_1_clean = regex.sub(ext_patt, "", filename_1_clean)
+    fname, extension = os.path.splitext(filename_1_clean)
+    print(fname)
+    filename_1_clean = fname
     #print(filename_1_clean)
     
     # Remove all 'Bis' from end of filename_1_clean
@@ -118,13 +120,14 @@ def create_filename(row_object):
     #So for 49) Palmira. Via colonnata presso il teatro. 20 marzo '93. Bis.jpg end result is
     #Palmira._Via_colonnata_presso_il_teatro._-_DecArch_-1-49.jpg
     #Palmira._Via_colonnata_presso_il_teatro._-_DecArch_-1-49.jpg
-    filename = filename_1_clean + "_-_DecArch_" + folder_no + "-" + filename_0_clean + ext
+    filename = filename_1_clean + "_-_DecArch_" + folder_no + "-" + filename_0_clean
     
     # Ensure no multiple spaces left
     filename = regex.sub(r" +"," ", filename)
     
     # Repalce all spaces with underscores
     filename = regex.sub(r" ", "_", filename)
+    print("Filename after create_filename(): {}".format(filename))
     
     return filename
 
@@ -143,7 +146,7 @@ def create_filename(row_object):
 # 
 # https://commons.wikimedia.org/wiki/Commons:Associazione_DecArch/Batch_upload/places
 
-# In[6]:
+# In[7]:
 
 place_mappings_url = "https://commons.wikimedia.org/wiki/Commons:Associazione_DecArch/Batch_upload/places"
 place_mappings = pd.read_html(place_mappings_url, attrs = {"class":"wikitable"}, header=0)
@@ -171,12 +174,12 @@ place_mappings_specific = place_mappings_specific[["Specific_place" ,"Luogo","No
 place_mappings_specific = place_mappings_specific.set_index("Specific_place")
 
 
-# In[7]:
+# In[8]:
 
 place_mappings_general.head(3)
 
 
-# In[8]:
+# In[9]:
 
 place_mappings_specific.head(3)
 
@@ -190,7 +193,7 @@ place_mappings_specific.head(3)
 # ## Create wikitext for image pages
 # Available as .py script on [my github](https://github.com/mattiasostmar/GAR_Syria_2016-06/blob/master/create_metatdata_textfiles.py)
 
-# In[11]:
+# In[68]:
 
 # remove possible diuplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
@@ -209,7 +212,7 @@ for row_no, row in merged.iterrows():
     filename = create_filename(row)
 
     #print("filename: {}".format(filename))
-    filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Nome foto"],filename))
+    filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
     
     outpath = "./photograph_template_texts/"
     nome_foto = row["Nome foto"].replace(" ", "_")
