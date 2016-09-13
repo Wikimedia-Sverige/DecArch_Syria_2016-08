@@ -218,7 +218,7 @@ def save_filename_to_filename_file(filname_file, filename):
     filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
 
 
-# In[66]:
+# In[74]:
 
 def create_infofile(row, filename):
     """Create wikitext for each file and store them in a folder with the extension .info"""
@@ -230,6 +230,7 @@ def create_infofile(row, filename):
     global total_images
     global OK_images
     global faulty_images
+    global uncategorized_images
     
     total_images += 1
     
@@ -272,7 +273,7 @@ def create_infofile(row, filename):
     elif pd.notnull(row["Monument name"]) and pd.notnull(row["Description"]) and not row["Monument name"] == row["Nome monumento"]:
         #print("Case  2")
         #description_en = "{{en|" + str(row["Description"]) + ", " + str(row["Place"]) + " in " + str(row["Anno"]) + "}}"
-        description_en = "{{en|" + row["Monument name"] + row["Place"] + ", in " + str(row["Anno"])
+        description_en = "{{en|" + row["Monument name"] + ", " + row["Place"] + ", in " + str(row["Anno"])
         
     else:
         #print("Case 3") # add maintanence category further down in categories appending section
@@ -433,13 +434,15 @@ def create_infofile(row, filename):
     if categories_list == None:
         print("categories_list is None")
         categories_list.append(categories_maintanence_category)
-        faulty_images += 1
+        #faulty_images += 1
+        uncategorized_images += 1
 
     categories_list.append(batchupload_category)
     
     
     if len(categories_list) >0:
         OK_images += 1
+    
     #print(categories_list)
     #print()
     
@@ -452,7 +455,7 @@ def create_infofile(row, filename):
     #return total_images, faulty_images, OK_images
 
 
-# In[67]:
+# In[75]:
 
 # remove possible duplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
@@ -471,6 +474,7 @@ for row_index, row in merged.iterrows():
     create_infofile(row, filename)
     #print("Stats: \nTotal images {}\nOK images {}\nUncategorized images {}\nImages missing author {}".format(total_images, OK_images - faulty_images, uncategorized_images, faulty_images ))
 #print("Total Stats: \nTotal images {}\nOK images {}\nUncategorized images {}\nImages missing author {}".format(total_images, OK_images - faulty_images, uncategorized_images, faulty_images ))
+print("Uncategorized images: {} out of {}".format(uncategorized_images, total_images))
 
 
 # ## Tests
