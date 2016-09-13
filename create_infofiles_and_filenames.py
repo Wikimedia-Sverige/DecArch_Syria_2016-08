@@ -56,21 +56,22 @@ metadata_en.tail(10)
 # In[5]:
 
 merged = pd.concat([metadata_it,metadata_en], axis=1) 
-merged.tail(2)
+merged.head(5)
 
 
 # # Create filenames
 
-# In[67]:
+# In[54]:
 
-def create_filename(row_object):
+def create_filename(fold, fobj):
     import os
     """Takes a DataFrame row from the 'merged' dataframe and returns a string filename."""
     # remove all underscores
-    no_underscores = regex.sub(r"_", " ", row["Filename"])
+    no_underscores = regex.sub(r"_", " ", fobj)
     
     # <Filename0>, dummy, <Filename1> = <Filename>.partition(" ") 
     filename0, dummy, filename1 = no_underscores.partition(" ")
+    #print("filename0: {}\n dummy: {}\n filename1: {}\n".format(filename0, dummy, filename1))
     
     # Grab the extension for later use
     ext = regex.findall(r"\.\w+",filename1)[-1]
@@ -78,56 +79,67 @@ def create_filename(row_object):
     
     # <Filename_1_clean> = <Filename1> with "20 marzo..." removed, any dubble spaces replaced by single ones 
     # and finally the spaces substituted by underscores (_). 
-    yeardate_patt = regex.compile(r" \d+[o']? m? ?arz[o0p] ?'?\d+[\. ]?",flags=regex.I)
+    yeardate_patt = regex.compile(r"[\. ]?\d+[o']? m? ?arz[o0p] ?'?\d+[\. ]?",flags=regex.I)
     year_patt = regex.compile(r" '\d\d[\.,]? ",flags=regex.I)
+    date_patt = regex.compile(r"20 marzo", flags=regex.I)
     
     yeardate_match = yeardate_patt.search(filename1)
     year_match = year_patt.search(filename1)
+    date_match = date_patt.search(filename1)
+    
+    #print("filename1: {}".format(filename1))
         
     if yeardate_match:
         filename_1_clean = regex.sub(yeardate_patt, " ",filename1)
+        #print("yeardate_match. filename_1_clean is:\n {:<30}".format(filename_1_clean))
         
     elif year_match and not yeardate_match:
         filename_1_clean = regex.sub(year_patt, " ",filename1)
+        #print("year_match and not yeardate_match. filename_1_clean is:\n {:<30}".format(filename_1_clean))
+        
+    #elif date_match and not yeardate_match:
+    #    print("date_match: {} in filename1: {}".format(date_match,filename1))
     
     else:
-        filename_1_clean = row["Filename"]
+        filename_1_clean = filename1
+        #print("no year_match or yeardate_match. filename_1_clean is:\n {:<30}".format(filename_1_clean))
     
     # Remove the extension from filename_1_clean
     fname, extension = os.path.splitext(filename_1_clean)
-    print(fname)
+    
     filename_1_clean = fname
     #print(filename_1_clean)
     
+    
     # Remove all 'Bis' from end of filename_1_clean
     filename_1_clean = regex.sub(r"Bis", "", filename_1_clean, flags=regex.I)
-    #print(filename_1_clean)
+    #print("filename_1_clean: {}".format(filename_1_clean))
     
     # Remove all leading and trailing whitespace from end of filename_1_clean
-    filename_1_clean = filename_1_clean.strip(" ")
-    #print(filename_1_clean)
+    # Ensure no double spaces left
+    filename_1_clean = filename_1_clean.strip(". ").replace(" ", "_").replace("__", "_")
+    #print(repr(filename_1_clean))
     
     # <Filename_0_clean> = <Filename0> with any trailing brackets ()) removed.
     filename_0_clean = regex.sub(r"\).?","",filename0)
     #print(filename_0_clean)
         
     # <Folder_#>, dummy, dummy = <Folder>.partition("_")
-    folder_no, dummy, dummy  = row["Folder"].partition("_")
-    #print(folder_no)
+    folder_no, dummy, dummy  = fold.partition("_")
+    #print("Folder number is: {}".format(folder_no))
     
+    ################## Final piecing together of filename ####################################
     #Filename: <Filename_1_clean>_-_DecArch_-_<Folder_no>-<Filename_0_clean>.<ext>
     #Filename example:
     #So for 49) Palmira. Via colonnata presso il teatro. 20 marzo '93. Bis.jpg end result is
     #Palmira._Via_colonnata_presso_il_teatro._-_DecArch_-1-49.jpg
     #Palmira._Via_colonnata_presso_il_teatro._-_DecArch_-1-49.jpg
-    filename = filename_1_clean + "_-_DecArch_" + folder_no + "-" + filename_0_clean
+    filename = filename_1_clean + "_-_DecArch_-_" + folder_no + "-" + filename_0_clean
+    #print("filename: {}\n".format(filename))
     
     # Ensure no multiple spaces left
-    filename = regex.sub(r" +"," ", filename)
-    
-    # Repalce all spaces with underscores
-    filename = regex.sub(r" ", "_", filename)
-    print("Filename after create_filename(): {}".format(filename))
+    #filename = regex.sub(r" +"," ", filename)
+    #print("filename is: {}".format(filename))
     
     return filename
 
@@ -174,12 +186,12 @@ place_mappings_specific = place_mappings_specific[["Specific_place" ,"Luogo","No
 place_mappings_specific = place_mappings_specific.set_index("Specific_place")
 
 
-# In[8]:
+# In[38]:
 
 place_mappings_general.head(3)
 
 
-# In[9]:
+# In[37]:
 
 place_mappings_specific.head(3)
 
@@ -193,31 +205,31 @@ place_mappings_specific.head(3)
 # ## Create wikitext for image pages
 # Available as .py script on [my github](https://github.com/mattiasostmar/GAR_Syria_2016-06/blob/master/create_metatdata_textfiles.py)
 
-# In[68]:
+# In[55]:
 
-# remove possible diuplicate files with other extension names
-get_ipython().system('rm -rf ./photograph_template_texts/*')
-
-total_images = 0
-OK_images = 0
-uncategorized_images = 0
-faulty_images = 0
-
-filenames_file = open("./filenames_mapping.csv","w")
-filenames_file.write("Folder|Original|Commons\n")
-
-for row_no, row in merged.iterrows():
-    
+def save_filename_to_filename_file(filname_file, filename):
+    """Create a file mapping original filenames and their folders with new
+    Commons filenames according to <Task X on Phabricator>"""
+    folder = row["Folder"]
+    file = row["Filename"]
     # Filename: <Filename_1_clean>_-_DecArch_-_<Folder_#>-<Filename_0_clean>.<ext>
-    filename = create_filename(row)
-
+    
     #print("filename: {}".format(filename))
     filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
+
+
+# In[66]:
+
+def create_infofile(row, filename):
+    """Create wikitext for each file and store them in a folder with the extension .info"""
     
     outpath = "./photograph_template_texts/"
     nome_foto = row["Nome foto"].replace(" ", "_")
     nome_foto_0, dummy, nome_foto_1 = nome_foto.rpartition("_")
     #print("nome_foto_0: {}\ndummy: {}\nnome_foto_1: {}".format(nome_foto_0,dummy,nome_foto_1))
+    global total_images
+    global OK_images
+    global faulty_images
     
     total_images += 1
     
@@ -240,7 +252,8 @@ for row_no, row in merged.iterrows():
     title = "|title = " + title_it #+ "\n" + title_en
     template_parts.append(title)
     
-    if pd.notnull(row["Descrizione"]) and len(row["Descrizione"].split()) >3:
+    # {{it|<Descrizione> OR <Nome monumento>, <Luogo>, <Anno>}}  IF <Nome monumento> is the same as <Luogo> then leave out <Nome Monumento>
+    if pd.notnull(row["Descrizione"]) and len(row["Descrizione"].split()) >3: 
         description_it = "{{it|" + row["Descrizione"] + "}}"
     else:
         if pd.notnull(row["Nome monumento"]) and pd.notnull(row["Luogo"]) and row["Nome monumento"] != row["Luogo"]: 
@@ -248,16 +261,28 @@ for row_no, row in merged.iterrows():
         else:
             pass # Fill in correct code here!
             description_it = "{{it|" + str(str(row["Luogo"])) + ", " + str(row["Anno"]) + "}}"
+    
+    eng_description_maintanence_category = None
+    # {{en|<Description> OR <Subject>, <Place> in <Anno>}} IF <Description> is the same as <Descrizione> THEN treat as empty
+    if pd.notnull(row["Description"]) and not (row["Description"] == row["Descrizione"]): #77 av 535 helt tomma
+        #print("Case 1")
+        description_en = "{{en|" + row["Monument name"] + "}}" # <Description> is empty though, not translated
+        #description = "|description = " + description_it + "\n" + description_en
         
-    if pd.notnull(row["Description"]) and not (row["Description"] == row["Descrizione"]):
-        description_en = "{{en|" + row["Description"] + "}}" # <Description> is empty though, not translated
-        description = "|description = " + description_it + "\n" + description_en
-    else:
+    elif pd.notnull(row["Monument name"]) and pd.notnull(row["Description"]) and not row["Monument name"] == row["Nome monumento"]:
+        #print("Case  2")
         #description_en = "{{en|" + str(row["Description"]) + ", " + str(row["Place"]) + " in " + str(row["Anno"]) + "}}"
-        description = "|description = " + description_it
+        description_en = "{{en|" + row["Monument name"] + row["Place"] + ", in " + str(row["Anno"])
+        
+    else:
+        #print("Case 3") # add maintanence category further down in categories appending section
+        eng_description_maintanence_category = "[[Category:Images_from_DecArch_without_English_description]]" # Nothing here at the moment
     
     
-    template_parts.append(description)
+    if 'description_en' in locals():
+        template_parts.extend([description_it, description_en])
+    else: 
+        template_parts.append(description_it)
     
     depicted_people = "|depicted people ="
     template_parts.append(depicted_people)
@@ -283,7 +308,7 @@ for row_no, row in merged.iterrows():
     # ex "...20 marzo '93..."
     common_date_patt = regex.compile(r" 20?[o']? m? ?arz[o0p] ?'?\d+[\. ]?",flags=regex.I) # matches one occasion of 2 marzo '93
     common_date_match = common_date_patt.search(row["Filename"])
-    print("Filename: {}\nMatch: {}".format(row["Filename"], common_date_match))
+    #print("Filename: {}\nMatch: {}".format(row["Filename"], common_date_match))
     
     if pd.notnull(row["Anno"]):
         if common_date_match:
@@ -327,12 +352,12 @@ for row_no, row in merged.iterrows():
     accession_number = "|accession number ="
     template_parts.append(accession_number)
     
-    source = "|source = " +    "The original image file was recieved from Associazione Decarch with the following <folder> / <filename> structure:<br />\n'''" +    str(row["Folder"]) + " / " + str(row["Filename"]) + "'''\n{{Associazione DecArch cooperation project|COH}}"
+    source = "|source = " +    "The original image file was recieved from Associazione Decarch with the following <folder> / <filename> structure:<br />\n''" +    str(row["Folder"]) + " / " + str(row["Filename"]) + "''\n{{Associazione DecArch cooperation project|COH}}"
     
     template_parts.append(source)
     
     if pd.notnull(row["Nome autore"]):
-        permission = "|permission = {{CC-BY-SA-4.0|" + row["Nome autore"][8:] + " / DecArch}}\n{{PermissionOTRS|id=2016042410005958}}"
+        permission = "|permission = {{CC-BY-SA-4.0|" + row["Nome autore"][8:] + " / DecArch}}\n{{PermissionOTRS|id=2016042410005869}}"
     else:
         permission = "|permission = {{CC-BY-SA-4.0|Associazione DecArch}}\n{{PermissionOTRS|id=2016042410005869}}"
     template_parts.append(permission)
@@ -347,36 +372,45 @@ for row_no, row in merged.iterrows():
     # [[Category:<Category from Specific Place> AND/OR <Category from Luogo (place)>]] 
     specific_place_category = None
     general_place_category = None
-    maintanence_category = None
+    categories_maintanence_category = None
     batchupload_category = "[[Category:Images_from_DecArch_2016-08]]"
     # if requested by DecArch:
     # translation_needed_category = "[[Category:Images_from_DecArch_needing_English_description]]"
     # categories_list.append(translation_needed_category)
     
-    if place_mappings_specific.loc[spec_place]["category"] != "-" and pd.notnull(place_mappings_specific.loc[spec_place]["category"]): 
-        
-        specific_place_category = "[[" + place_mappings_specific.loc[spec_place]["category"] + "]]"
-        #print("specific_place_category{}".format(specific_place_category)) 
-     
-    elif place_mappings_general.loc[row["Luogo"]]["category"] != "-" and pd.notnull(place_mappings_general.loc[row["Luogo"]]["category"]):
+    if eng_description_maintanence_category:
+        categories_list.append(eng_description_maintanence_category)
+    
+    if 'spec_place' in locals():
+        if place_mappings_specific.loc[spec_place]["category"] != "-" and pd.notnull(place_mappings_specific.loc[spec_place]["category"]): 
+            specific_place_category = "[[" + place_mappings_specific.loc[spec_place]["category"] + "]]"
+            #print("specific_place_category{}".format(specific_place_category)) 
+
+            
+    if place_mappings_general.loc[row["Luogo"]]["category"] != "-" and pd.notnull(place_mappings_general.loc[row["Luogo"]]["category"]):
         general_place_category = "[[" + place_mappings_general.loc[row["Luogo"]]["category"] + "]]"
         #print("general_place_category: {}".format(general_place_category))
     
-    else:
-        maintanence_category = "[[Category:Images_from_DecArch_without_categories]]"
-        #print("maintanence_category: {}".format(maintanence_category))
-    
     # manage content categories
-    if specific_place_category :
+    if specific_place_category:
         categories_list.append(specific_place_category)
         
     elif general_place_category and not specific_place_category:
         categories_list.append(general_place_category) 
+        
+    elif general_place_category and specific_place_category:
+        categories_list.extend([general_place_category, specific_place_category])
+        
+    else:
+        print("No categories appended to file: {}".format(filename))
+        categories_maintanence_category = "[[Category:Images_from_DecArch_without_categories]]"
+        #print("maintanence_category: {}".format(maintanence_category))
+        categories_list.append(categories_maintanence_category)
     
     Commons_category = "[[Category:" + str(row["Commons_category"]) + "]]"
     if regex.search(r" \+ ",Commons_category):
         cats = regex.split(r" \+ ",Commons_category)
-        print("{} is really {}".format(row.Commons_category, cats))
+        #print("{} is really {}".format(row.Commons_category, cats))
         
         for cat_no, cat in enumerate(cats):
             if cat_no == 0:
@@ -386,19 +420,19 @@ for row_no, row in merged.iterrows():
             
             if Commons_category != specific_place_category and Commons_category != general_place_category:
                 categories_list.append(Commons_category)
-                print("Commons_category: {}".format(Commons_category))
+                #print("Commons_category: {}".format(Commons_category))
             else:
                 pass
     else:
         pass
     
     if Commons_category != specific_place_category     and Commons_category != general_place_category     and pd.notnull(row["Commons_category"]):
-            categories_list.append(Commons_category)
-            #print("Commons_category: {}".format(Commons_category))
+        categories_list.append(Commons_category)
+        #print("Commons_category: {}".format(Commons_category))
                 
     if categories_list == None:
         print("categories_list is None")
-        categories_list.append(maintanence_category)
+        categories_list.append(categories_maintanence_category)
         faulty_images += 1
 
     categories_list.append(batchupload_category)
@@ -407,23 +441,57 @@ for row_no, row in merged.iterrows():
     if len(categories_list) >0:
         OK_images += 1
     #print(categories_list)
-    print()
+    #print()
     
     if not os.path.exists(outpath):
         os.mkdir(outpath)
     outfile = open(outpath + filename + ".info", "w")
     outfile.write("\n".join(template_parts) + "\n" + "\n".join(categories_list))
 
-filename_file.close()    
-print("Stats: \nTotal images {}\nOK images {}\nUncategorized images {}\nImages missing author {}".format(total_images, OK_images - faulty_images, uncategorized_images, faulty_images ))
+    outfile.close()
+    #return total_images, faulty_images, OK_images
 
 
-# In[11]:
+# In[67]:
 
-get_ipython().system('ls -la ./photograph_template_texts/ | head -n10')
+# remove possible duplicate files with other extension names
+get_ipython().system('rm -rf ./photograph_template_texts/*')
+
+total_images = 0
+OK_images = 0
+uncategorized_images = 0
+faulty_images = 0
+
+filenames_file = open("./filenames_mapping.csv","w")
+filenames_file.write("Folder|Original|Commons\n")
+    
+for row_index, row in merged.iterrows():
+    filename = create_filename(row["Folder"], row["Filename"])
+    save_filename_to_filename_file(filenames_file, filename)
+    create_infofile(row, filename)
+    #print("Stats: \nTotal images {}\nOK images {}\nUncategorized images {}\nImages missing author {}".format(total_images, OK_images - faulty_images, uncategorized_images, faulty_images ))
+#print("Total Stats: \nTotal images {}\nOK images {}\nUncategorized images {}\nImages missing author {}".format(total_images, OK_images - faulty_images, uncategorized_images, faulty_images ))
 
 
 # ## Tests
+
+# In[44]:
+
+not_translated_description = 0
+for index, row in merged.iterrows():
+    if row["Description"] == row["Descrizione"]:
+        not_translated_description += 1
+print(not_translated_description)
+
+
+# In[45]:
+
+not_translated_monument_name = 0
+for index, row in merged.iterrows():
+    if row["Monument name"] == row["Nome monumento"]:
+        not_translated_description += 1
+print(not_translated_description)
+
 
 # In[ ]:
 
