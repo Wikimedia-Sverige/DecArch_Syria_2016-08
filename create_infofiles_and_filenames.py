@@ -61,7 +61,7 @@ merged.head(5)
 
 # # Create filenames
 
-# In[54]:
+# In[6]:
 
 def create_filename(fold, fobj):
     import os
@@ -186,12 +186,12 @@ place_mappings_specific = place_mappings_specific[["Specific_place" ,"Luogo","No
 place_mappings_specific = place_mappings_specific.set_index("Specific_place")
 
 
-# In[38]:
+# In[8]:
 
 place_mappings_general.head(3)
 
 
-# In[37]:
+# In[9]:
 
 place_mappings_specific.head(3)
 
@@ -205,7 +205,7 @@ place_mappings_specific.head(3)
 # ## Create wikitext for image pages
 # Available as .py script on [my github](https://github.com/mattiasostmar/GAR_Syria_2016-06/blob/master/create_metatdata_textfiles.py)
 
-# In[55]:
+# In[10]:
 
 def save_filename_to_filename_file(filname_file, filename):
     """Create a file mapping original filenames and their folders with new
@@ -218,7 +218,7 @@ def save_filename_to_filename_file(filname_file, filename):
     filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
 
 
-# In[74]:
+# In[11]:
 
 def create_infofile(row, filename):
     """Create wikitext for each file and store them in a folder with the extension .info"""
@@ -273,7 +273,7 @@ def create_infofile(row, filename):
     elif pd.notnull(row["Monument name"]) and pd.notnull(row["Description"]) and not row["Monument name"] == row["Nome monumento"]:
         #print("Case  2")
         #description_en = "{{en|" + str(row["Description"]) + ", " + str(row["Place"]) + " in " + str(row["Anno"]) + "}}"
-        description_en = "{{en|" + row["Monument name"] + ", " + row["Place"] + ", in " + str(row["Anno"])
+        description_en = "{{en|" + row["Monument name"] + ", " + row["Place"] + ", in " + str(row["Anno"]) + "}}"
         
     else:
         #print("Case 3") # add maintanence category further down in categories appending section
@@ -454,6 +454,8 @@ def create_infofile(row, filename):
     outfile.close()
     #return total_images, faulty_images, OK_images
 
+
+# # Run the full script
 
 # In[75]:
 
