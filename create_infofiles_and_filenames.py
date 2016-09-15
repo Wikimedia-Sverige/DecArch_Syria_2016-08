@@ -218,7 +218,7 @@ def save_filename_to_filename_file(filname_file, filename):
     filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
 
 
-# In[21]:
+# In[11]:
 
 def create_infofile(row, filename):
     """Create wikitext for each file and store them in a folder with the extension .info"""
@@ -255,34 +255,35 @@ def create_infofile(row, filename):
         title_en = "|title = {{en|" + row["Monument name"] + "}}"
     else:
         pass
-    
+    title = "|title = "
     if 'title_en' in locals():
-        template_parts.append(title_it)
-        template_parts.append(title_en)
+        full_title = title + title_it + "\n" + title_en
+        template_parts.append(full_title)
     else:
-        template_parts.append(title_it)
+        full_title = title + title_it
+        template_parts.append(full_title)
     
     # {{it|<Descrizione> OR <Nome monumento>, <Luogo>, <Anno>}}  IF <Nome monumento> is the same as <Luogo> then leave out <Nome Monumento>
     if pd.notnull(row["Descrizione"]) and len(row["Descrizione"].split()) >3: 
-        description_it = "|description = {{it|" + row["Descrizione"] + "}}"
+        description_it = "{{it|" + row["Descrizione"] + "}}"
     else:
         if pd.notnull(row["Nome monumento"]) and pd.notnull(row["Luogo"]) and row["Nome monumento"] != row["Luogo"]: 
-            description_it = "|description = {{it|" + str(row["Nome monumento"]) + ", " + str(row["Luogo"]) + ", " + str(row["Anno"]) + "}}"
+            description_it = "{{it|" + str(row["Nome monumento"]) + ", " + str(row["Luogo"]) + ", " + str(row["Anno"]) + "}}"
         else:
             pass # Fill in correct code here!
-            description_it = "|description = {{it|" + str(str(row["Luogo"])) + ", " + str(row["Anno"]) + "}}"
+            description_it = "{{it|" + str(str(row["Luogo"])) + ", " + str(row["Anno"]) + "}}"
     
     eng_description_maintanence_category = None
     # {{en|<Description> OR <Subject>, <Place> in <Anno>}} IF <Description> is the same as <Descrizione> THEN treat as empty
     if pd.notnull(row["Description"]) and not (row["Description"] == row["Descrizione"]): #77 av 535 helt tomma
         #print("Case 1")
-        description_en = "|description = {{en|" + row["Monument name"] + "}}" # <Description> is empty though, not translated
+        description_en = "{{en|" + row["Monument name"] + "}}" # <Description> is empty though, not translated
         #description = "|description = " + description_it + "\n" + description_en
         
     elif pd.notnull(row["Monument name"]) and pd.notnull(row["Description"]) and not row["Monument name"] == row["Nome monumento"]:
         #print("Case  2")
         #description_en = "{{en|" + str(row["Description"]) + ", " + str(row["Place"]) + " in " + str(row["Anno"]) + "}}"
-        description_en = "|description = {{en|" + row["Monument name"] + ", " + row["Place"] + ", in " + str(row["Anno"]) + "}}"
+        description_en = "{{en|" + row["Monument name"] + ", " + row["Place"] + ", in " + str(row["Anno"]) + "}}"
         
     else:
         #print("Case 3") # add maintanence category further down in categories appending section
@@ -290,9 +291,11 @@ def create_infofile(row, filename):
     
     
     if 'description_en' in locals():
-        template_parts.extend([description_it, description_en])
+        full_description = "|description = " + description_it + "\n" + description_en
+        template_parts.append(full_description)
     else: 
-        template_parts.append(description_it)
+        full_description = "|description = " + description_it
+        template_parts.append(full_description)
     
     depicted_people = "|depicted people ="
     template_parts.append(depicted_people)
@@ -466,7 +469,7 @@ def create_infofile(row, filename):
 
 # # Run the full script
 
-# In[23]:
+# In[12]:
 
 # remove possible duplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
@@ -518,7 +521,7 @@ depicted_place = "|depicted place = {{city|" + place_mappings_specific.loc[row["
 place_mappings_specific
 
 
-# In[25]:
+# In[26]:
 
 merged.columns
 
