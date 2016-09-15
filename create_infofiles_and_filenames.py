@@ -218,7 +218,7 @@ def save_filename_to_filename_file(filname_file, filename):
     filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
 
 
-# In[11]:
+# In[13]:
 
 def create_infofile(row, filename):
     """Create wikitext for each file and store them in a folder with the extension .info"""
@@ -248,11 +248,11 @@ def create_infofile(row, filename):
     template_parts.append(photographer)
     
     if pd.notnull(row["Nome foto"]):
-        title_it = "|title = {{it|'''" + row["Nome foto"] + "'''}}"
+        title_it = "{{it|'''" + row["Nome foto"] + "'''}}"
     else:
         print("Warning! Column 'Nome foto' in file {} is empty!".format())
     if pd.notnull(row["Monument name"]) and row["Monument name"] != row["Nome foto"]:
-        title_en = "|title = {{en|" + row["Monument name"] + "}}"
+        title_en = "{{en|" + row["Monument name"] + "}}"
     else:
         pass
     title = "|title = "
@@ -469,7 +469,7 @@ def create_infofile(row, filename):
 
 # # Run the full script
 
-# In[12]:
+# In[14]:
 
 # remove possible duplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
