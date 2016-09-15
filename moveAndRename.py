@@ -95,8 +95,8 @@ def copy_info_files(info_dir, data, out_dir):
 def main(*args):
     """Command line entry point"""
     in_file = u'DecArch_Syria_2016_08/filenames_mapping.csv'
-    info_dir = u'photograph_template_texts'
-    base_dir = u'/media/mos/USB DISK/DecArch'
+    info_dir = u'DecArch_Syria_2016_08/photograph_template_texts/'
+    base_dir = u'/media/mos/USB DISK/DecArch/'
     out_dir = u'renamed'
 
     for arg in args:
@@ -115,7 +115,7 @@ def main(*args):
     files = find_all_files(base_dir, folders)
     move_matching_files(files, data, out_dir)
     prep.removeEmptyDirectories(base_dir)
-    #copy_info_files(info_dir, data, out_dir)
+    copy_info_files(info_dir, data, out_dir)
     print 'Done'
 
 if __name__ == "__main__":

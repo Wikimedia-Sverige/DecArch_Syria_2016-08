@@ -218,7 +218,7 @@ def save_filename_to_filename_file(filname_file, filename):
     filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
 
 
-# In[11]:
+# In[21]:
 
 def create_infofile(row, filename):
     """Create wikitext for each file and store them in a folder with the extension .info"""
@@ -247,33 +247,42 @@ def create_infofile(row, filename):
         faulty_images += 1
     template_parts.append(photographer)
     
-    title_it = "{{it|'''" + regex.sub("_"," ",nome_foto) + "'''}}"
-    #title_en = "{{en|" + regex.sub("_"," ",row["Title"][:-3]) + "}}"
+    if pd.notnull(row["Nome foto"]):
+        title_it = "|title = {{it|'''" + row["Nome foto"] + "'''}}"
+    else:
+        print("Warning! Column 'Nome foto' in file {} is empty!".format())
+    if pd.notnull(row["Monument name"]) and row["Monument name"] != row["Nome foto"]:
+        title_en = "|title = {{en|" + row["Monument name"] + "}}"
+    else:
+        pass
     
-    title = "|title = " + title_it #+ "\n" + title_en
-    template_parts.append(title)
+    if 'title_en' in locals():
+        template_parts.append(title_it)
+        template_parts.append(title_en)
+    else:
+        template_parts.append(title_it)
     
     # {{it|<Descrizione> OR <Nome monumento>, <Luogo>, <Anno>}}  IF <Nome monumento> is the same as <Luogo> then leave out <Nome Monumento>
     if pd.notnull(row["Descrizione"]) and len(row["Descrizione"].split()) >3: 
-        description_it = "{{it|" + row["Descrizione"] + "}}"
+        description_it = "|description = {{it|" + row["Descrizione"] + "}}"
     else:
         if pd.notnull(row["Nome monumento"]) and pd.notnull(row["Luogo"]) and row["Nome monumento"] != row["Luogo"]: 
-            description_it = "{{it|" + str(row["Nome monumento"]) + ", " + str(row["Luogo"]) + ", " + str(row["Anno"]) + "}}"
+            description_it = "|description = {{it|" + str(row["Nome monumento"]) + ", " + str(row["Luogo"]) + ", " + str(row["Anno"]) + "}}"
         else:
             pass # Fill in correct code here!
-            description_it = "{{it|" + str(str(row["Luogo"])) + ", " + str(row["Anno"]) + "}}"
+            description_it = "|description = {{it|" + str(str(row["Luogo"])) + ", " + str(row["Anno"]) + "}}"
     
     eng_description_maintanence_category = None
     # {{en|<Description> OR <Subject>, <Place> in <Anno>}} IF <Description> is the same as <Descrizione> THEN treat as empty
     if pd.notnull(row["Description"]) and not (row["Description"] == row["Descrizione"]): #77 av 535 helt tomma
         #print("Case 1")
-        description_en = "{{en|" + row["Monument name"] + "}}" # <Description> is empty though, not translated
+        description_en = "|description = {{en|" + row["Monument name"] + "}}" # <Description> is empty though, not translated
         #description = "|description = " + description_it + "\n" + description_en
         
     elif pd.notnull(row["Monument name"]) and pd.notnull(row["Description"]) and not row["Monument name"] == row["Nome monumento"]:
         #print("Case  2")
         #description_en = "{{en|" + str(row["Description"]) + ", " + str(row["Place"]) + " in " + str(row["Anno"]) + "}}"
-        description_en = "{{en|" + row["Monument name"] + ", " + row["Place"] + ", in " + str(row["Anno"]) + "}}"
+        description_en = "|description = {{en|" + row["Monument name"] + ", " + row["Place"] + ", in " + str(row["Anno"]) + "}}"
         
     else:
         #print("Case 3") # add maintanence category further down in categories appending section
@@ -457,7 +466,7 @@ def create_infofile(row, filename):
 
 # # Run the full script
 
-# In[75]:
+# In[22]:
 
 # remove possible duplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
