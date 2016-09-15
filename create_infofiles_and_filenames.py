@@ -466,7 +466,7 @@ def create_infofile(row, filename):
 
 # # Run the full script
 
-# In[22]:
+# In[23]:
 
 # remove possible duplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
@@ -516,6 +516,11 @@ depicted_place = "|depicted place = {{city|" + place_mappings_specific.loc[row["
 # In[15]:
 
 place_mappings_specific
+
+
+# In[25]:
+
+merged.columns
 
 
 # In[ ]:
