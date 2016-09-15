@@ -218,7 +218,7 @@ def save_filename_to_filename_file(filname_file, filename):
     filenames_file.write("{}|{}|{}\n".format(row["Folder"],row["Filename"],filename))
 
 
-# In[13]:
+# In[15]:
 
 def create_infofile(row, filename):
     """Create wikitext for each file and store them in a folder with the extension .info"""
@@ -469,7 +469,7 @@ def create_infofile(row, filename):
 
 # # Run the full script
 
-# In[14]:
+# In[16]:
 
 # remove possible duplicate files with other extension names
 get_ipython().system('rm -rf ./photograph_template_texts/*')
@@ -525,7 +525,7 @@ place_mappings_specific
 
 merged.columns
 
-
+test ssh
 # In[ ]:
 
 
